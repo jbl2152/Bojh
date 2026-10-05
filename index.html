@@ -1,215 +1,906 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1">
 
-    <title>BoJhX Player</title>
+<title>BoJhX — NEXUS</title>
 
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+<style>
 
-        body {
-            background: #07060d;
-            color: white;
-            font-family: Arial, sans-serif;
-            min-height: 100vh;
-        }
+:root{
+  --bg:#050609;
+  --panel:#0b0d13;
+  --line:#1d2230;
+  --text:#f4f6ff;
+  --muted:#72798a;
+  --accent:#7c5cff;
+  --accent2:#00d9ff;
+}
 
-        .container {
-            padding: 20px;
-            max-width: 650px;
-            margin: auto;
-        }
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
 
-        .vip {
-            background: linear-gradient(135deg, #5146e5, #a72ee8);
-            padding: 18px;
-            border-radius: 20px;
-            margin-bottom: 30px;
-        }
+html,body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
+}
 
-        .vip h2 {
-            font-size: 20px;
-            margin-bottom: 8px;
-        }
+body{
+  min-height:100vh;
+  overflow-x:hidden;
+}
 
-        .vip p {
-            opacity: .9;
-            font-size: 14px;
-        }
+/* ---------- BACKGROUND ---------- */
 
-        .player-icon {
-            width: 120px;
-            height: 120px;
-            margin: 35px auto 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 30px;
-            background: linear-gradient(135deg, #8d4cff, #6741e8);
-            font-size: 50px;
-        }
+body::before{
+  content:"";
+  position:fixed;
+  width:320px;
+  height:320px;
+  top:-140px;
+  right:-100px;
+  background:var(--accent);
+  filter:blur(120px);
+  opacity:.18;
+  pointer-events:none;
+}
 
-        .title {
-            text-align: center;
-            font-size: 34px;
-            font-weight: 800;
-            margin-bottom: 10px;
-        }
+body::after{
+  content:"";
+  position:fixed;
+  width:260px;
+  height:260px;
+  bottom:-100px;
+  left:-100px;
+  background:var(--accent2);
+  filter:blur(120px);
+  opacity:.12;
+  pointer-events:none;
+}
 
-        .subtitle {
-            text-align: center;
-            color: #aaa;
-            margin-bottom: 25px;
-        }
+/* ---------- APP ---------- */
 
-        .input-area {
-            display: flex;
-            gap: 8px;
-            background: #11101a;
-            border: 1px solid #252331;
-            padding: 8px;
-            border-radius: 18px;
-        }
+.app{
+  width:100%;
+  max-width:720px;
+  margin:auto;
+  padding:18px 16px 40px;
+  position:relative;
+  z-index:1;
+}
 
-        input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            color: white;
-            padding: 12px;
-            font-size: 14px;
-        }
+/* ---------- TOP BAR ---------- */
 
-        button {
-            border: none;
-            border-radius: 14px;
-            padding: 12px 18px;
-            color: white;
-            background: #246bce;
-            font-weight: bold;
-        }
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:22px;
+}
 
-        .feature {
-            margin-top: 18px;
-            background: #0e0d16;
-            border: 1px solid #211f2c;
-            padding: 20px;
-            border-radius: 20px;
-        }
+.brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+}
 
-        .feature h3 {
-            margin-bottom: 8px;
-        }
+.brand-mark{
+  width:42px;
+  height:42px;
+  border-radius:14px;
 
-        .feature p {
-            color: #999;
-            line-height: 1.5;
-        }
+  display:flex;
+  align-items:center;
+  justify-content:center;
 
-        #result {
-            margin-top: 20px;
-            text-align: center;
-            color: #b9a7ff;
-        }
-    </style>
+  background:
+    linear-gradient(135deg,
+      var(--accent),
+      #432bc8);
+
+  box-shadow:
+    0 0 25px rgba(124,92,255,.25);
+
+  font-size:19px;
+  font-weight:900;
+}
+
+.brand-name{
+  font-size:19px;
+  font-weight:850;
+  letter-spacing:-.5px;
+}
+
+.brand-sub{
+  font-size:10px;
+  color:var(--muted);
+  margin-top:2px;
+  letter-spacing:1px;
+}
+
+.live{
+  display:flex;
+  align-items:center;
+  gap:6px;
+
+  padding:7px 10px;
+  border:1px solid var(--line);
+  border-radius:20px;
+
+  color:#7df3b4;
+  font-size:10px;
+  letter-spacing:1px;
+}
+
+.live-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#57e89b;
+  box-shadow:0 0 10px #57e89b;
+}
+
+/* ---------- HERO ---------- */
+
+.hero{
+  margin:25px 0 20px;
+}
+
+.hero-label{
+  color:var(--accent2);
+  font-size:10px;
+  font-weight:800;
+  letter-spacing:2px;
+  margin-bottom:8px;
+}
+
+.hero-title{
+  font-size:34px;
+  line-height:1.05;
+  font-weight:900;
+  letter-spacing:-1.5px;
+}
+
+.hero-title span{
+  color:var(--accent);
+}
+
+.hero-text{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+}
+
+/* ---------- PLAYER ---------- */
+
+.player-shell{
+  position:relative;
+  border:1px solid var(--line);
+  border-radius:24px;
+  overflow:hidden;
+
+  background:#020307;
+
+  box-shadow:
+    0 20px 70px rgba(0,0,0,.45);
+}
+
+.player-shell::before{
+  content:"BOJHX // NEXUS";
+  position:absolute;
+  top:13px;
+  left:15px;
+  z-index:3;
+
+  color:rgba(255,255,255,.35);
+  font-size:9px;
+  letter-spacing:2px;
+
+  pointer-events:none;
+}
+
+video{
+  width:100%;
+  display:block;
+  aspect-ratio:16/9;
+  background:#020307;
+}
+
+/* ---------- EMPTY PLAYER ---------- */
+
+.empty{
+  aspect-ratio:16/9;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+
+  position:relative;
+  overflow:hidden;
+}
+
+.empty-grid{
+  position:absolute;
+  inset:0;
+
+  background-image:
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+
+  background-size:28px 28px;
+}
+
+.core{
+  width:82px;
+  height:82px;
+
+  border-radius:50%;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border:1px solid rgba(124,92,255,.6);
+
+  background:
+    radial-gradient(circle,
+      rgba(124,92,255,.35),
+      rgba(124,92,255,.04) 65%,
+      transparent 70%);
+
+  box-shadow:
+    0 0 50px rgba(124,92,255,.2);
+
+  font-size:27px;
+
+  animation:pulse 2.8s infinite;
+}
+
+@keyframes pulse{
+  0%,100%{
+    transform:scale(1);
+  }
+  50%{
+    transform:scale(1.07);
+  }
+}
+
+.empty-title{
+  margin-top:17px;
+  font-size:14px;
+  font-weight:700;
+}
+
+.empty-sub{
+  margin-top:5px;
+  color:var(--muted);
+  font-size:10px;
+}
+
+/* ---------- INPUT ---------- */
+
+.command{
+  margin-top:15px;
+
+  display:flex;
+  gap:8px;
+
+  padding:7px;
+
+  background:var(--panel);
+
+  border:1px solid var(--line);
+  border-radius:18px;
+}
+
+.command-icon{
+  width:42px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--accent2);
+}
+
+input{
+  flex:1;
+  min-width:0;
+
+  border:0;
+  outline:0;
+
+  background:transparent;
+
+  color:white;
+  font-size:13px;
+}
+
+input::placeholder{
+  color:#555c6d;
+}
+
+.play-btn{
+  border:0;
+  outline:0;
+
+  padding:12px 18px;
+
+  border-radius:13px;
+
+  color:white;
+  font-weight:800;
+
+  background:
+    linear-gradient(135deg,
+      var(--accent),
+      #5539d5);
+
+  box-shadow:
+    0 7px 22px rgba(124,92,255,.2);
+}
+
+/* ---------- MESSAGE ---------- */
+
+.message{
+  min-height:20px;
+  text-align:center;
+  margin:11px 0;
+
+  color:var(--muted);
+  font-size:11px;
+}
+
+/* ---------- MODULES ---------- */
+
+.module{
+  margin-top:15px;
+
+  background:rgba(11,13,19,.82);
+
+  border:1px solid var(--line);
+  border-radius:20px;
+
+  padding:17px;
+}
+
+.module-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+
+  margin-bottom:13px;
+}
+
+.module-title{
+  font-size:13px;
+  font-weight:800;
+}
+
+.module-tag{
+  color:var(--accent2);
+  font-size:9px;
+  letter-spacing:1px;
+}
+
+/* ---------- FEATURES ---------- */
+
+.features{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+}
+
+.feature{
+  padding:14px 10px;
+
+  background:#090b10;
+  border:1px solid var(--line);
+  border-radius:15px;
+}
+
+.feature-icon{
+  font-size:17px;
+  margin-bottom:8px;
+}
+
+.feature-title{
+  font-size:10px;
+  font-weight:800;
+}
+
+.feature-text{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.4;
+}
+
+/* ---------- HISTORY ---------- */
+
+.history{
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.history-item{
+  display:flex;
+  align-items:center;
+  gap:10px;
+
+  padding:11px;
+
+  background:#090b10;
+  border:1px solid var(--line);
+  border-radius:13px;
+
+  cursor:pointer;
+}
+
+.history-icon{
+  width:30px;
+  height:30px;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  border-radius:9px;
+
+  background:#15121f;
+}
+
+.history-url{
+  flex:1;
+
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+
+  color:#aeb4c2;
+  font-size:10px;
+}
+
+.empty-history{
+  color:#555c6d;
+  font-size:11px;
+}
+
+/* ---------- FOOTER ---------- */
+
+.footer{
+  text-align:center;
+  margin-top:28px;
+
+  color:#3f4553;
+  font-size:9px;
+  letter-spacing:1.5px;
+}
+
+.hidden{
+  display:none!important;
+}
+
+</style>
 </head>
 
 <body>
 
-<div class="container">
+<div class="app">
 
-    <div class="vip">
-        <h2>💎 GET VIP</h2>
-        <p>Ad-free experience coming soon</p>
+  <!-- TOP -->
+
+  <header class="topbar">
+
+    <div class="brand">
+
+      <div class="brand-mark">
+        B
+      </div>
+
+      <div>
+        <div class="brand-name">
+          BoJhX
+        </div>
+
+        <div class="brand-sub">
+          NEXUS PLAYER
+        </div>
+      </div>
+
     </div>
 
-    <div class="player-icon">
+    <div class="live">
+      <span class="live-dot"></span>
+      ONLINE
+    </div>
+
+  </header>
+
+
+  <!-- HERO -->
+
+  <section class="hero">
+
+    <div class="hero-label">
+      PRIVATE MEDIA SPACE
+    </div>
+
+    <h1 class="hero-title">
+      Your media.<br>
+      <span>Your control.</span>
+    </h1>
+
+    <p class="hero-text">
+      A focused playback environment built for
+      authorized video content.
+    </p>
+
+  </section>
+
+
+  <!-- PLAYER -->
+
+  <section class="player-shell">
+
+    <div id="emptyPlayer" class="empty">
+
+      <div class="empty-grid"></div>
+
+      <div class="core">
         ▶
-    </div>
+      </div>
 
-    <div class="title">
-        BoJhX Player
-    </div>
+      <div class="empty-title">
+        PLAYER STANDBY
+      </div>
 
-    <div class="subtitle">
-        Your authorized video player
-    </div>
-
-    <div class="input-area">
-
-        <input
-            id="videoLink"
-            type="url"
-            placeholder="Paste your video link..."
-        >
-
-        <button onclick="playVideo()">
-            ▶ Play
-        </button>
+      <div class="empty-sub">
+        CONNECT A VIDEO SOURCE BELOW
+      </div>
 
     </div>
 
-    <div id="result"></div>
+    <video
+      id="videoPlayer"
+      class="hidden"
+      controls
+      playsinline>
+    </video>
 
-    <div class="feature">
-        <h3>⚡ Fast Streaming</h3>
-        <p>
-            Stream your authorized videos
-            through a fast delivery system.
-        </p>
+  </section>
+
+
+  <!-- COMMAND -->
+
+  <div class="command">
+
+    <div class="command-icon">
+      ⛓
     </div>
 
-    <div class="feature">
-        <h3>🔒 Secure Playback</h3>
-        <p>
-            Protected playback will be added
-            in the backend stage.
-        </p>
+    <input
+      id="videoUrl"
+      type="url"
+      autocomplete="off"
+      placeholder="Paste authorized video URL..."
+    >
+
+    <button
+      class="play-btn"
+      onclick="loadVideo()">
+      PLAY
+    </button>
+
+  </div>
+
+  <div id="message" class="message"></div>
+
+
+  <!-- FEATURES -->
+
+  <section class="module">
+
+    <div class="module-head">
+
+      <div class="module-title">
+        NEXUS SYSTEM
+      </div>
+
+      <div class="module-tag">
+        ACTIVE
+      </div>
+
     </div>
 
-    <div class="feature">
-        <h3>🎬 HD Quality</h3>
-        <p>
-            Support for high-quality videos.
-        </p>
+    <div class="features">
+
+      <div class="feature">
+
+        <div class="feature-icon">
+          ⚡
+        </div>
+
+        <div class="feature-title">
+          FAST
+        </div>
+
+        <div class="feature-text">
+          Direct authorized playback.
+        </div>
+
+      </div>
+
+
+      <div class="feature">
+
+        <div class="feature-icon">
+          ◈
+        </div>
+
+        <div class="feature-title">
+          PRIVATE
+        </div>
+
+        <div class="feature-text">
+          Minimal data footprint.
+        </div>
+
+      </div>
+
+
+      <div class="feature">
+
+        <div class="feature-icon">
+          ◉
+        </div>
+
+        <div class="feature-title">
+          HD
+        </div>
+
+        <div class="feature-text">
+          Quality limited by source.
+        </div>
+
+      </div>
+
     </div>
+
+  </section>
+
+
+  <!-- HISTORY -->
+
+  <section class="module">
+
+    <div class="module-head">
+
+      <div class="module-title">
+        RECENT SIGNALS
+      </div>
+
+      <div class="module-tag">
+        LOCAL
+      </div>
+
+    </div>
+
+    <div id="history" class="history"></div>
+
+  </section>
+
+
+  <footer class="footer">
+    BOJHX / NEXUS / AUTHORIZED MEDIA
+  </footer>
 
 </div>
 
+
 <script>
 
-    const tg = window.Telegram.WebApp;
+const tg = window.Telegram.WebApp;
 
-    tg.ready();
-    tg.expand();
+tg.ready();
+tg.expand();
 
-    function playVideo() {
+const video =
+  document.getElementById("videoPlayer");
 
-        const link =
-            document.getElementById("videoLink").value;
+const empty =
+  document.getElementById("emptyPlayer");
 
-        if (!link) {
+const input =
+  document.getElementById("videoUrl");
 
-            document.getElementById("result").innerText =
-                "Please enter a video link.";
+const message =
+  document.getElementById("message");
 
-            return;
-        }
+const historyBox =
+  document.getElementById("history");
 
-        document.getElementById("result").innerText =
-            "Player backend will be connected in the next stage.";
+
+function notify(text){
+
+  message.textContent = text;
+
+}
+
+
+function validURL(value){
+
+  try{
+
+    const url = new URL(value);
+
+    return (
+      url.protocol === "https:" ||
+      url.protocol === "http:"
+    );
+
+  }catch{
+
+    return false;
+
+  }
+
+}
+
+
+function loadVideo(){
+
+  const url = input.value.trim();
+
+  if(!url){
+
+    notify("ENTER A VIDEO SOURCE.");
+
+    return;
+  }
+
+  if(!validURL(url)){
+
+    notify("INVALID VIDEO URL.");
+
+    return;
+  }
+
+
+  video.src = url;
+
+  empty.classList.add("hidden");
+
+  video.classList.remove("hidden");
+
+  video.load();
+
+  saveHistory(url);
+
+  notify("VIDEO SOURCE CONNECTED.");
+
+  video.play().catch(()=>{
+
+    notify("SOURCE READY — PRESS PLAY.");
+
+  });
+
+}
+
+
+function saveHistory(url){
+
+  let history =
+    JSON.parse(
+      localStorage.getItem("bojhx_nexus_history")
+      || "[]"
+    );
+
+  history =
+    history.filter(item => item !== url);
+
+  history.unshift(url);
+
+  history =
+    history.slice(0,6);
+
+  localStorage.setItem(
+    "bojhx_nexus_history",
+    JSON.stringify(history)
+  );
+
+  renderHistory();
+
+}
+
+
+function renderHistory(){
+
+  const history =
+    JSON.parse(
+      localStorage.getItem("bojhx_nexus_history")
+      || "[]"
+    );
+
+  historyBox.innerHTML = "";
+
+
+  if(!history.length){
+
+    historyBox.innerHTML =
+      '<div class="empty-history">' +
+      'No previous signals.' +
+      '</div>';
+
+    return;
+  }
+
+
+  history.forEach(url => {
+
+    const item =
+      document.createElement("div");
+
+    item.className =
+      "history-item";
+
+
+    item.innerHTML =
+      '<div class="history-icon">▶</div>' +
+      '<div class="history-url"></div>';
+
+
+    item.querySelector(".history-url")
+      .textContent = url;
+
+
+    item.onclick = () => {
+
+      input.value = url;
+
+      loadVideo();
+
+    };
+
+
+    historyBox.appendChild(item);
+
+  });
+
+}
+
+
+input.addEventListener(
+  "keydown",
+  event => {
+
+    if(event.key === "Enter"){
+
+      loadVideo();
+
     }
+
+  }
+);
+
+
+renderHistory();
 
 </script>
 
 </body>
-      </html>
+</html>
