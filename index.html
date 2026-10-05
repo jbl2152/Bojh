@@ -713,7 +713,7 @@ input::placeholder{
 
 
 <script>
-
+      
 const tg = window.Telegram.WebApp;
 
 tg.ready();
@@ -735,12 +735,28 @@ const historyBox =
   document.getElementById("history");
 
 
+/* =========================
+   CONFIG
+========================= */
+
+const API_BASE =
+  "https://bojhx-bot.alexa215225.workers.dev";
+
+
+/* =========================
+   MESSAGE
+========================= */
+
 function notify(text){
 
   message.textContent = text;
 
 }
 
+
+/* =========================
+   URL VALIDATION
+========================= */
 
 function validURL(value){
 
@@ -761,6 +777,10 @@ function validURL(value){
 
 }
 
+
+/* =========================
+   NORMAL VIDEO PLAYER
+========================= */
 
 function loadVideo(){
 
@@ -802,39 +822,245 @@ function loadVideo(){
 }
 
 
+/* =========================
+   LOAD VIDEO FROM ID
+========================= */
+
+async function loadVideoById(id){
+
+  notify("CONNECTING TO NEXUS...");
+
+  try{
+
+    const response = await fetch(
+      API_BASE +
+      "/api/video?id=" +
+      encodeURIComponent(id)
+    );
+
+
+    if(!response.ok){
+
+      throw new Error("Video not found");
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if(!data.ok || !data.url){
+
+      throw new Error("Invalid video data");
+
+    }
+
+
+    /*
+      Put authorized URL into
+      the existing player.
+    */
+
+    input.value = data.url;
+
+
+    video.src = data.url;
+
+    empty.classList.add("hidden");
+
+    video.classList.remove("hidden");
+
+    video.load();
+
+
+    /*
+      Show title when available.
+    */
+
+    if(data.title){
+
+      notify(
+        "LOADED: " +
+        data.title
+      );
+
+    }else{
+
+      notify(
+        "VIDEO SOURCE CONNECTED."
+      );
+
+    }
+
+
+    saveHistory(data.url);
+
+
+    /*
+      Browser/Telegram may block
+      autoplay. That's okay.
+    */
+
+    video.play().catch(()=>{
+
+      notify(
+        data.title
+        ? data.title + " — PRESS PLAY."
+        : "SOURCE READY — PRESS PLAY."
+      );
+
+    });
+
+
+  }catch(error){
+
+    console.error(error);
+
+    notify(
+      "VIDEO ID COULD NOT BE LOADED."
+    );
+
+  }
+
+}
+
+
+/* =========================
+   GET TELEGRAM START PARAM
+========================= */
+
+function getStartParam(){
+
+  /*
+    Telegram WebApp normally exposes
+    start_param here.
+  */
+
+  if(
+    tg &&
+    tg.initDataUnsafe &&
+    tg.initDataUnsafe.start_param
+  ){
+
+    return tg.initDataUnsafe.start_param;
+
+  }
+
+
+  /*
+    Fallback:
+    tgWebAppStartParam
+  */
+
+  const params =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  return (
+    params.get("tgWebAppStartParam")
+    || ""
+  );
+
+}
+
+
+/* =========================
+   AUTO OPEN VIDEO
+========================= */
+
+async function handleStartParam(){
+
+  const startParam =
+    getStartParam();
+
+
+  if(!startParam){
+
+    return;
+
+  }
+
+
+  /*
+    We only recognize our
+    internal video IDs.
+  */
+
+  if(
+    !startParam.startsWith("v_")
+  ){
+
+    return;
+
+  }
+
+
+  notify(
+    "VIDEO ID: " +
+    startParam
+  );
+
+
+  await loadVideoById(
+    startParam
+  );
+
+}
+
+
+/* =========================
+   HISTORY
+========================= */
+
 function saveHistory(url){
 
   let history =
     JSON.parse(
-      localStorage.getItem("bojhx_nexus_history")
-      || "[]"
+      localStorage.getItem(
+        "bojhx_nexus_history"
+      ) || "[]"
     );
 
+
   history =
-    history.filter(item => item !== url);
+    history.filter(
+      item => item !== url
+    );
+
 
   history.unshift(url);
 
+
   history =
     history.slice(0,6);
+
 
   localStorage.setItem(
     "bojhx_nexus_history",
     JSON.stringify(history)
   );
 
+
   renderHistory();
 
 }
 
 
+/* =========================
+   RENDER HISTORY
+========================= */
+
 function renderHistory(){
 
   const history =
     JSON.parse(
-      localStorage.getItem("bojhx_nexus_history")
-      || "[]"
+      localStorage.getItem(
+        "bojhx_nexus_history"
+      ) || "[]"
     );
+
 
   historyBox.innerHTML = "";
 
@@ -847,6 +1073,7 @@ function renderHistory(){
       '</div>';
 
     return;
+
   }
 
 
@@ -854,6 +1081,7 @@ function renderHistory(){
 
     const item =
       document.createElement("div");
+
 
     item.className =
       "history-item";
@@ -864,8 +1092,9 @@ function renderHistory(){
       '<div class="history-url"></div>';
 
 
-    item.querySelector(".history-url")
-      .textContent = url;
+    item.querySelector(
+      ".history-url"
+    ).textContent = url;
 
 
     item.onclick = () => {
@@ -884,6 +1113,10 @@ function renderHistory(){
 }
 
 
+/* =========================
+   ENTER KEY
+========================= */
+
 input.addEventListener(
   "keydown",
   event => {
@@ -898,7 +1131,13 @@ input.addEventListener(
 );
 
 
+/* =========================
+   INITIALIZE
+========================= */
+
 renderHistory();
+
+handleStartParam();
 
 </script>
 
