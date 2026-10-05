@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NebulaX Player</title>
+
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #07060d;
+            color: white;
+            font-family: Arial, sans-serif;
+            min-height: 100vh;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 650px;
+            margin: auto;
+        }
+
+        .vip {
+            background: linear-gradient(135deg, #5146e5, #a72ee8);
+            padding: 18px;
+            border-radius: 20px;
+            margin-bottom: 30px;
+        }
+
+        .vip h2 {
+            font-size: 20px;
+            margin-bottom: 8px;
+        }
+
+        .vip p {
+            opacity: .9;
+            font-size: 14px;
+        }
+
+        .player-icon {
+            width: 120px;
+            height: 120px;
+            margin: 35px auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #8d4cff, #6741e8);
+            font-size: 50px;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 34px;
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+
+        .input-area {
+            display: flex;
+            gap: 8px;
+            background: #11101a;
+            border: 1px solid #252331;
+            padding: 8px;
+            border-radius: 18px;
+        }
+
+        input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        button {
+            border: none;
+            border-radius: 14px;
+            padding: 12px 18px;
+            color: white;
+            background: #246bce;
+            font-weight: bold;
+        }
+
+        .feature {
+            margin-top: 18px;
+            background: #0e0d16;
+            border: 1px solid #211f2c;
+            padding: 20px;
+            border-radius: 20px;
+        }
+
+        .feature h3 {
+            margin-bottom: 8px;
+        }
+
+        .feature p {
+            color: #999;
+            line-height: 1.5;
+        }
+
+        #result {
+            margin-top: 20px;
+            text-align: center;
+            color: #b9a7ff;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="vip">
+        <h2>💎 GET VIP</h2>
+        <p>Ad-free experience coming soon</p>
+    </div>
+
+    <div class="player-icon">
+        ▶
+    </div>
+
+    <div class="title">
+        NebulaX Player
+    </div>
+
+    <div class="subtitle">
+        Your authorized video player
+    </div>
+
+    <div class="input-area">
+
+        <input
+            id="videoLink"
+            type="url"
+            placeholder="Paste your video link..."
+        >
+
+        <button onclick="playVideo()">
+            ▶ Play
+        </button>
+
+    </div>
+
+    <div id="result"></div>
+
+    <div class="feature">
+        <h3>⚡ Fast Streaming</h3>
+        <p>
+            Stream your authorized videos
+            through a fast delivery system.
+        </p>
+    </div>
+
+    <div class="feature">
+        <h3>🔒 Secure Playback</h3>
+        <p>
+            Protected playback will be added
+            in the backend stage.
+        </p>
+    </div>
+
+    <div class="feature">
+        <h3>🎬 HD Quality</h3>
+        <p>
+            Support for high-quality videos.
+        </p>
+    </div>
+
+</div>
+
+<script>
+
+    const tg = window.Telegram.WebApp;
+
+    tg.ready();
+    tg.expand();
+
+    function playVideo() {
+
+        const link =
+            document.getElementById("videoLink").value;
+
+        if (!link) {
+
+            document.getElementById("result").innerText =
+                "Please enter a video link.";
+
+            return;
+        }
+
+        document.getElementById("result").innerText =
+            "Player backend will be connected in the next stage.";
+    }
+
+</script>
+
+</body>
+      </html>
