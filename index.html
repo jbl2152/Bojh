@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0, viewport-fit=cover"
@@ -13,10 +14,16 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <style>
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    html,
+    body {
+      min-height: 100%;
     }
 
     body {
@@ -39,20 +46,29 @@
       padding: 16px;
     }
 
-    .app {
-      max-width: 720px;
-      margin: auto;
+    button,
+    input {
+      font: inherit;
     }
+
+    .app {
+      width: 100%;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    /* ================= TOP ================= */
 
     .topbar {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       margin-bottom: 18px;
     }
 
     .brand {
-      font-size: 23px;
+      font-size: 22px;
       font-weight: 900;
       letter-spacing: 2px;
     }
@@ -70,27 +86,31 @@
       font-size: 10px;
       font-weight: 900;
       letter-spacing: 1px;
+      white-space: nowrap;
     }
+
+    /* ================= MAIN ================= */
 
     .hero {
       border: 1px solid #173d32;
       border-radius: 24px;
       padding: 22px;
-      background: rgba(5, 15, 12, .94);
-      box-shadow: 0 20px 70px rgba(0,0,0,.45);
+      background: rgba(5, 15, 12, 0.96);
+      box-shadow:
+        0 20px 70px rgba(0, 0, 0, 0.45);
     }
 
     .label {
       color: #68aa98;
       font-size: 10px;
-      letter-spacing: 2px;
       font-weight: 900;
+      letter-spacing: 2px;
       margin-bottom: 8px;
     }
 
     h1 {
       font-size: 46px;
-      line-height: .95;
+      line-height: 0.95;
       letter-spacing: -2px;
       margin-bottom: 12px;
     }
@@ -102,7 +122,7 @@
     }
 
     .section {
-      margin-top: 20px;
+      margin-top: 22px;
     }
 
     .section-title {
@@ -113,6 +133,8 @@
       margin-bottom: 9px;
     }
 
+    /* ================= IDENTITY ================= */
+
     .identity {
       border: 1px solid #174237;
       background: #030d0a;
@@ -122,9 +144,10 @@
 
     .row {
       display: flex;
+      align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 6px 0;
+      padding: 7px 0;
     }
 
     .key {
@@ -152,6 +175,8 @@
       color: #ffc866 !important;
     }
 
+    /* ================= DIAGNOSTIC ================= */
+
     .diagnostic {
       display: none;
       margin-top: 10px;
@@ -165,6 +190,8 @@
       word-break: break-word;
     }
 
+    /* ================= PLAYER ================= */
+
     .player {
       border: 1px solid #174237;
       border-radius: 18px;
@@ -173,10 +200,10 @@
     }
 
     video {
-      width: 100%;
       display: block;
-      background: #000;
+      width: 100%;
       max-height: 420px;
+      background: #000;
     }
 
     .player-info {
@@ -186,6 +213,7 @@
     }
 
     .title {
+      color: #ecfff8;
       font-size: 14px;
       font-weight: 900;
       margin-bottom: 5px;
@@ -195,6 +223,8 @@
       color: #6f958b;
       font-size: 11px;
     }
+
+    /* ================= INPUT ================= */
 
     .input-wrap {
       display: flex;
@@ -208,9 +238,13 @@
       border-radius: 14px;
       border: 1px solid #194538;
       background: #030d0a;
-      color: white;
+      color: #ffffff;
       outline: none;
       font-size: 13px;
+    }
+
+    input::placeholder {
+      color: #5e7770;
     }
 
     input:focus {
@@ -230,8 +264,10 @@
     }
 
     button:active {
-      transform: scale(.99);
+      transform: scale(0.99);
     }
+
+    /* ================= SYSTEM ================= */
 
     .system {
       display: grid;
@@ -251,6 +287,7 @@
       display: block;
       color: #52f5ad;
       margin-bottom: 5px;
+      font-size: 13px;
     }
 
     .card span {
@@ -258,6 +295,8 @@
       font-size: 9px;
       letter-spacing: 1px;
     }
+
+    /* ================= HISTORY ================= */
 
     .history {
       display: flex;
@@ -277,7 +316,12 @@
       cursor: pointer;
     }
 
+    .history-item:active {
+      border-color: #42e9a0;
+    }
+
     .history-title {
+      color: #eafff8;
       font-size: 12px;
       font-weight: 800;
     }
@@ -294,6 +338,8 @@
       font-size: 11px;
     }
 
+    /* ================= FOOTER ================= */
+
     .footer {
       text-align: center;
       color: #3d5b54;
@@ -302,7 +348,14 @@
       padding: 20px 0 8px;
     }
 
-    @media(max-width:430px) {
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 430px) {
+
+      body {
+        padding: 12px;
+      }
+
       .hero {
         padding: 17px;
       }
@@ -310,1008 +363,1401 @@
       h1 {
         font-size: 40px;
       }
+
+      .brand {
+        font-size: 19px;
+      }
+
     }
+
   </style>
 </head>
 
+
 <body>
 
-<div class="app">
+  <div class="app">
 
-  <div class="topbar">
-    <div class="brand">
-      BoJhX<span>/</span>NEXUS
-    </div>
+    <!-- TOP BAR -->
 
-    <div class="online">
-      ONLINE
-    </div>
-  </div>
+    <div class="topbar">
 
-  <div class="hero">
-
-    <div class="label">
-      PRIVATE MEDIA SPACE
-    </div>
-
-    <h1>
-      NEXUS<br>PLAYER
-    </h1>
-
-    <div class="subtitle">
-      Your media. Your control.
-    </div>
-
-
-    <!-- ================= IDENTITY ================= -->
-
-    <div class="section">
-
-      <div class="section-title">
-        NEXUS IDENTITY
+      <div class="brand">
+        BoJhX<span>/</span>NEXUS
       </div>
 
-      <div class="identity">
-
-        <div class="row">
-          <span class="key">STATUS</span>
-          <span id="identityStatus" class="value">
-            STARTING...
-          </span>
-        </div>
-
-        <div class="row">
-          <span class="key">USER</span>
-          <span id="identityName" class="value">
-            —
-          </span>
-        </div>
-
-        <div class="row">
-          <span class="key">PLAN</span>
-          <span id="identityPlan" class="value warning">
-            LOCKED
-          </span>
-        </div>
-
-        <div class="row">
-          <span class="key">STAGE</span>
-          <span id="identityStage" class="value">
-            0 / 5
-          </span>
-        </div>
-
+      <div class="online">
+        ONLINE
       </div>
-
-      <div id="diagnostic" class="diagnostic"></div>
 
     </div>
 
 
-    <!-- ================= PLAYER ================= -->
+    <!-- MAIN -->
 
-    <div class="section">
+    <div class="hero">
 
-      <div class="section-title">
-        PLAYER STANDBY
+      <div class="label">
+        PRIVATE MEDIA SPACE
       </div>
 
-      <div class="player">
+      <h1>
+        NEXUS<br>
+        PLAYER
+      </h1>
 
-        <video
-          id="videoPlayer"
-          controls
-          playsinline
-          preload="metadata"
-        ></video>
+      <div class="subtitle">
+        Your media. Your control.
+      </div>
 
-        <div class="player-info">
 
-          <div id="videoTitle" class="title">
-            No video loaded
+      <!-- ================= IDENTITY ================= -->
+
+      <div class="section">
+
+        <div class="section-title">
+          NEXUS IDENTITY
+        </div>
+
+        <div class="identity">
+
+          <div class="row">
+
+            <span class="key">
+              STATUS
+            </span>
+
+            <span
+              id="identityStatus"
+              class="value"
+            >
+              STARTING...
+            </span>
+
           </div>
 
-          <div id="videoStatus" class="video-status">
-            Waiting for authorized media...
+
+          <div class="row">
+
+            <span class="key">
+              USER
+            </span>
+
+            <span
+              id="identityName"
+              class="value"
+            >
+              —
+            </span>
+
+          </div>
+
+
+          <div class="row">
+
+            <span class="key">
+              PLAN
+            </span>
+
+            <span
+              id="identityPlan"
+              class="value warning"
+            >
+              LOCKED
+            </span>
+
+          </div>
+
+
+          <div class="row">
+
+            <span class="key">
+              STAGE
+            </span>
+
+            <span
+              id="identityStage"
+              class="value"
+            >
+              0 / 5
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div
+          id="diagnostic"
+          class="diagnostic"
+        ></div>
+
+      </div>
+
+
+      <!-- ================= PLAYER ================= -->
+
+      <div class="section">
+
+        <div class="section-title">
+          PLAYER STANDBY
+        </div>
+
+
+        <div class="player">
+
+          <video
+            id="videoPlayer"
+            controls
+            playsinline
+            preload="metadata"
+          ></video>
+
+
+          <div class="player-info">
+
+            <div
+              id="videoTitle"
+              class="title"
+            >
+              No video loaded
+            </div>
+
+
+            <div
+              id="videoStatus"
+              class="video-status"
+            >
+              Waiting for authorized media...
+            </div>
+
           </div>
 
         </div>
 
       </div>
 
-    </div>
 
+      <!-- ================= DIRECT URL ================= -->
 
-    <!-- ================= DIRECT URL ================= -->
+      <div class="section">
 
-    <div class="section">
-
-      <div class="section-title">
-        AUTHORIZED VIDEO URL
-      </div>
-
-      <div class="input-wrap">
-
-        <input
-          id="videoUrl"
-          type="url"
-          placeholder="Paste your authorized video URL..."
-          autocomplete="off"
-        >
-
-        <button id="playBtn">
-          ▶ PLAY VIDEO
-        </button>
-
-      </div>
-
-    </div>
-
-
-    <!-- ================= SYSTEM ================= -->
-
-    <div class="section">
-
-      <div class="section-title">
-        NEXUS SYSTEM
-      </div>
-
-      <div class="system">
-
-        <div class="card">
-          <strong>FAST</strong>
-          <span>STREAM</span>
+        <div class="section-title">
+          AUTHORIZED VIDEO URL
         </div>
 
-        <div class="card">
-          <strong>PRIVATE</strong>
-          <span>ACCESS</span>
-        </div>
 
-        <div class="card">
-          <strong>HD</strong>
-          <span>QUALITY</span>
+        <div class="input-wrap">
+
+          <input
+            id="videoUrl"
+            type="url"
+            placeholder="Paste your authorized video URL..."
+            autocomplete="off"
+          >
+
+
+          <button
+            id="playBtn"
+            type="button"
+          >
+            ▶ PLAY VIDEO
+          </button>
+
         </div>
 
       </div>
 
+
+      <!-- ================= SYSTEM ================= -->
+
+      <div class="section">
+
+        <div class="section-title">
+          NEXUS SYSTEM
+        </div>
+
+
+        <div class="system">
+
+          <div class="card">
+            <strong>FAST</strong>
+            <span>STREAM</span>
+          </div>
+
+
+          <div class="card">
+            <strong>PRIVATE</strong>
+            <span>ACCESS</span>
+          </div>
+
+
+          <div class="card">
+            <strong>HD</strong>
+            <span>QUALITY</span>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- ================= HISTORY ================= -->
+
+      <div class="section">
+
+        <div class="section-title">
+          RECENT SIGNALS
+        </div>
+
+
+        <div
+          id="history"
+          class="history"
+        ></div>
+
+      </div>
+
     </div>
 
 
-    <!-- ================= HISTORY ================= -->
-
-    <div class="section">
-
-      <div class="section-title">
-        RECENT SIGNALS
-      </div>
-
-      <div id="history" class="history"></div>
-
+    <div class="footer">
+      BOJHX PLAYER • NEXUS SYSTEM
     </div>
 
   </div>
 
 
-  <div class="footer">
-    BOJHX PLAYER • NEXUS SYSTEM
-  </div>
+  <!-- =====================================================
+       JAVASCRIPT
+  ====================================================== -->
 
-</div>
+  <script>
 
+    "use strict";
 
-<script>
 
-/* =========================================================
-   CONFIG
-========================================================= */
+    /* =====================================================
+       CONFIGURATION
+    ===================================================== */
 
-const API_BASE =
-  "https://bojhx-bot.alexa215225.workers.dev";
+    const API_BASE =
+      "https://bojhx-bot.alexa215225.workers.dev";
 
-const HISTORY_KEY =
-  "bojhx_nexus_history";
+    const HISTORY_KEY =
+      "bojhx_nexus_history";
 
 
-/* =========================================================
-   TELEGRAM
-========================================================= */
+    /* =====================================================
+       TELEGRAM
+    ===================================================== */
 
-const tg =
-  window.Telegram &&
-  window.Telegram.WebApp
-    ? window.Telegram.WebApp
-    : null;
+    const tg =
+      window.Telegram &&
+      window.Telegram.WebApp
+        ? window.Telegram.WebApp
+        : null;
 
 
-/* =========================================================
-   GLOBAL
-========================================================= */
+    /* =====================================================
+       GLOBAL STATE
+    ===================================================== */
 
-let currentUser = null;
+    let currentUser = null;
 
 
-/* =========================================================
-   DOM
-========================================================= */
+    /* =====================================================
+       DOM ELEMENTS
+    ===================================================== */
 
-const statusEl =
-  document.getElementById("identityStatus");
+    const statusEl =
+      document.getElementById(
+        "identityStatus"
+      );
 
-const nameEl =
-  document.getElementById("identityName");
+    const nameEl =
+      document.getElementById(
+        "identityName"
+      );
 
-const planEl =
-  document.getElementById("identityPlan");
+    const planEl =
+      document.getElementById(
+        "identityPlan"
+      );
 
-const stageEl =
-  document.getElementById("identityStage");
+    const stageEl =
+      document.getElementById(
+        "identityStage"
+      );
 
-const diagnosticEl =
-  document.getElementById("diagnostic");
+    const diagnosticEl =
+      document.getElementById(
+        "diagnostic"
+      );
 
-const player =
-  document.getElementById("videoPlayer");
+    const player =
+      document.getElementById(
+        "videoPlayer"
+      );
 
-const videoTitle =
-  document.getElementById("videoTitle");
+    const videoTitle =
+      document.getElementById(
+        "videoTitle"
+      );
 
-const videoStatus =
-  document.getElementById("videoStatus");
+    const videoStatus =
+      document.getElementById(
+        "videoStatus"
+      );
 
-const videoUrl =
-  document.getElementById("videoUrl");
+    const videoUrl =
+      document.getElementById(
+        "videoUrl"
+      );
 
-const playBtn =
-  document.getElementById("playBtn");
+    const playBtn =
+      document.getElementById(
+        "playBtn"
+      );
 
-const historyEl =
-  document.getElementById("history");
-
-
-/* =========================================================
-   DIAGNOSTIC
-========================================================= */
-
-function stage(number, text) {
-
-  stageEl.textContent =
-    number + " / 5";
-
-  statusEl.textContent =
-    text;
-
-  console.log(
-    "[BoJhX]",
-    number,
-    text
-  );
-
-}
-
-
-function showDiagnostic(message) {
-
-  diagnosticEl.textContent =
-    message;
-
-  diagnosticEl.style.display =
-    "block";
-
-}
-
-
-function showSuccess(message) {
-
-  diagnosticEl.textContent =
-    message;
-
-  diagnosticEl.style.display =
-    "block";
-
-  diagnosticEl.style.borderColor =
-    "#1b6047";
-
-  diagnosticEl.style.background =
-    "#061a12";
-
-  diagnosticEl.style.color =
-    "#62ffb7";
-
-}
-
-
-function hideDiagnostic() {
-
-  diagnosticEl.textContent =
-    "";
-
-  diagnosticEl.style.display =
-    "none";
-
-}
-
-
-/* =========================================================
-   TELEGRAM INITIALIZATION
-========================================================= */
-
-function initializeTelegram() {
-
-  stage(1, "STARTING...");
-
-  if (!tg) {
-
-    statusEl.textContent =
-      "TELEGRAM SDK NOT FOUND";
-
-    statusEl.className =
-      "value danger";
-
-    showDiagnostic(
-      "Telegram WebApp SDK is unavailable. Open BoJhX Player from Telegram."
-    );
-
-    throw new Error(
-      "Telegram WebApp SDK unavailable"
-    );
-
-  }
-
-
-  try {
-
-    tg.ready();
-
-    tg.expand();
-
-    stage(
-      2,
-      "TELEGRAM READY"
-    );
-
-  } catch (error) {
-
-    statusEl.textContent =
-      "TELEGRAM ERROR";
-
-    statusEl.className =
-      "value danger";
-
-    showDiagnostic(
-      "Telegram initialization failed."
-    );
-
-    throw error;
-
-  }
-
-}
-
-
-/* =========================================================
-   AUTHENTICATION
-========================================================= */
-
-async function authenticateUser() {
-
-  stage(
-    3,
-    "READING AUTH DATA"
-  );
-
-  hideDiagnostic();
-
-
-  /*
-    IMPORTANT:
-    initData = signed Telegram data.
-
-    initDataUnsafe is NOT used
-    for authentication.
-  */
-
-  const initData =
-    tg.initData;
-
-
-  if (!initData) {
-
-    statusEl.textContent =
-      "NO AUTH DATA";
-
-    statusEl.className =
-      "value danger";
-
-    nameEl.textContent =
-      "Telegram data unavailable";
-
-    planEl.textContent =
-      "LOCKED";
-
-    showDiagnostic(
-      "Telegram did not provide initData. Open BoJhX Player using Telegram's Open App button."
-    );
-
-    return false;
-
-  }
-
-
-  stage(
-    4,
-    "CONTACTING SERVER"
-  );
-
-
-  const controller =
-    new AbortController();
-
-  const timeout =
-    setTimeout(
-      () => controller.abort(),
-      10000
-    );
-
-
-  try {
-
-    const response =
-      await fetch(
-        API_BASE + "/api/me",
-        {
-          method: "GET",
-
-          headers: {
-            "Authorization":
-              "Bearer " + initData
-          },
-
-          signal:
-            controller.signal
-        }
+    const historyEl =
+      document.getElementById(
+        "history"
       );
 
 
-    clearTimeout(timeout);
+    /* =====================================================
+       STAGE
+    ===================================================== */
+
+    function setStage(
+      number,
+      text
+    ) {
+
+      stageEl.textContent =
+        number + " / 5";
+
+      statusEl.textContent =
+        text;
+
+      console.log(
+        "[BoJhX]",
+        number,
+        text
+      );
+
+    }
 
 
-    stage(
-      5,
-      "SERVER RESPONSE " +
-      response.status
+    /* =====================================================
+       DIAGNOSTIC
+    ===================================================== */
+
+    function showDiagnostic(
+      message
+    ) {
+
+      diagnosticEl.textContent =
+        message;
+
+      diagnosticEl.style.display =
+        "block";
+
+      diagnosticEl.style.borderColor =
+        "#5b292f";
+
+      diagnosticEl.style.background =
+        "#1a090c";
+
+      diagnosticEl.style.color =
+        "#ff929a";
+
+    }
+
+
+    function showSuccess(
+      message
+    ) {
+
+      diagnosticEl.textContent =
+        message;
+
+      diagnosticEl.style.display =
+        "block";
+
+      diagnosticEl.style.borderColor =
+        "#1b6047";
+
+      diagnosticEl.style.background =
+        "#061a12";
+
+      diagnosticEl.style.color =
+        "#62ffb7";
+
+    }
+
+
+    function hideDiagnostic() {
+
+      diagnosticEl.textContent =
+        "";
+
+      diagnosticEl.style.display =
+        "none";
+
+    }
+
+
+    /* =====================================================
+       TELEGRAM INITIALIZATION
+    ===================================================== */
+
+    function initializeTelegram() {
+
+      setStage(
+        1,
+        "STARTING..."
+      );
+
+
+      if (!tg) {
+
+        statusEl.textContent =
+          "SDK NOT FOUND";
+
+        statusEl.className =
+          "value danger";
+
+        showDiagnostic(
+          "Telegram WebApp SDK was not detected. Open BoJhX Player from Telegram."
+        );
+
+        return false;
+
+      }
+
+
+      try {
+
+        tg.ready();
+
+        tg.expand();
+
+
+        setStage(
+          2,
+          "TELEGRAM READY"
+        );
+
+
+        return true;
+
+      } catch (error) {
+
+        statusEl.textContent =
+          "TELEGRAM ERROR";
+
+        statusEl.className =
+          "value danger";
+
+        showDiagnostic(
+          "Telegram initialization failed: " +
+          (
+            error.message ||
+            "Unknown error"
+          )
+        );
+
+        return false;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       TELEGRAM AUTHENTICATION
+    ===================================================== */
+
+    async function authenticateUser() {
+
+      setStage(
+        3,
+        "READING AUTH DATA"
+      );
+
+
+      hideDiagnostic();
+
+
+      /*
+        IMPORTANT:
+
+        initData is the signed Telegram
+        Mini App authentication payload.
+
+        We NEVER use initDataUnsafe
+        for authentication.
+      */
+
+      const initData =
+        tg
+          ? tg.initData
+          : "";
+
+
+      if (!initData) {
+
+        statusEl.textContent =
+          "NO AUTH DATA";
+
+        statusEl.className =
+          "value danger";
+
+        nameEl.textContent =
+          "Telegram data unavailable";
+
+        planEl.textContent =
+          "LOCKED";
+
+        showDiagnostic(
+          "Telegram did not provide initData. Reopen BoJhX Player using Telegram's Open App button."
+        );
+
+        return false;
+
+      }
+
+
+      setStage(
+        4,
+        "CONTACTING SERVER"
+      );
+
+
+      const controller =
+        new AbortController();
+
+
+      const timeoutId =
+        setTimeout(
+          function () {
+
+            controller.abort();
+
+          },
+          10000
+        );
+
+
+      try {
+
+        const response =
+          await fetch(
+            API_BASE +
+            "/api/me",
+            {
+              method: "GET",
+
+              headers: {
+                "Authorization":
+                  "Bearer " +
+                  initData
+              },
+
+              signal:
+                controller.signal
+            }
+          );
+
+
+        clearTimeout(
+          timeoutId
+        );
+
+
+        setStage(
+          5,
+          "SERVER RESPONSE " +
+          response.status
+        );
+
+
+        let data;
+
+
+        try {
+
+          data =
+            await response.json();
+
+        } catch (error) {
+
+          throw new Error(
+            "Worker returned invalid JSON."
+          );
+
+        }
+
+
+        if (
+          !response.ok ||
+          !data.ok ||
+          !data.user
+        ) {
+
+          statusEl.textContent =
+            "FAILED";
+
+          statusEl.className =
+            "value danger";
+
+          nameEl.textContent =
+            "Authentication failed";
+
+          planEl.textContent =
+            "LOCKED";
+
+
+          showDiagnostic(
+            "Worker response: " +
+            (
+              data.error ||
+              "Unknown authentication error"
+            ) +
+            " (HTTP " +
+            response.status +
+            ")"
+          );
+
+
+          return false;
+
+        }
+
+
+        /* =========================
+           AUTH SUCCESS
+        ========================= */
+
+        currentUser =
+          data.user;
+
+
+        statusEl.textContent =
+          "VERIFIED";
+
+        statusEl.className =
+          "value success";
+
+
+        nameEl.textContent =
+          currentUser.first_name ||
+          currentUser.username ||
+          "Telegram User";
+
+
+        if (
+          currentUser.premium
+        ) {
+
+          planEl.textContent =
+            "PREMIUM";
+
+          planEl.className =
+            "value success";
+
+        } else {
+
+          planEl.textContent =
+            "FREE";
+
+          planEl.className =
+            "value";
+
+        }
+
+
+        showSuccess(
+          "Telegram identity verified successfully."
+        );
+
+
+        console.log(
+          "[BoJhX] User verified:",
+          currentUser
+        );
+
+
+        return true;
+
+
+      } catch (error) {
+
+        clearTimeout(
+          timeoutId
+        );
+
+
+        statusEl.textContent =
+          "FAILED";
+
+        statusEl.className =
+          "value danger";
+
+
+        nameEl.textContent =
+          "Connection error";
+
+
+        planEl.textContent =
+          "LOCKED";
+
+
+        if (
+          error.name ===
+          "AbortError"
+        ) {
+
+          showDiagnostic(
+            "Worker request timed out after 10 seconds."
+          );
+
+        } else {
+
+          showDiagnostic(
+            "Request error: " +
+            (
+              error.message ||
+              "Unknown error"
+            )
+          );
+
+        }
+
+
+        console.error(
+          "[BoJhX] Authentication error:",
+          error
+        );
+
+
+        return false;
+
+      }
+
+    }
+
+
+    /* =====================================================
+       HISTORY
+    ===================================================== */
+
+    function getHistory() {
+
+      try {
+
+        const data =
+          localStorage.getItem(
+            HISTORY_KEY
+          );
+
+
+        if (!data) {
+
+          return [];
+
+        }
+
+
+        const parsed =
+          JSON.parse(data);
+
+
+        return Array.isArray(
+          parsed
+        )
+          ? parsed
+          : [];
+
+
+      } catch (error) {
+
+        console.warn(
+          "[BoJhX] History read error:",
+          error
+        );
+
+        return [];
+
+      }
+
+    }
+
+
+    function saveHistory(
+      item
+    ) {
+
+      let history =
+        getHistory();
+
+
+      history =
+        history.filter(
+          function (oldItem) {
+
+            return (
+              oldItem.id !==
+              item.id
+            );
+
+          }
+        );
+
+
+      history.unshift(
+        item
+      );
+
+
+      history =
+              history.slice(
+        0,
+        8
+      );
+
+
+      try {
+
+        localStorage.setItem(
+          HISTORY_KEY,
+          JSON.stringify(
+            history
+          )
+        );
+
+      } catch (error) {
+
+        console.warn(
+          "[BoJhX] Unable to save history",
+          error
+        );
+
+      }
+
+
+      renderHistory();
+
+    }
+
+
+    /* =========================================================
+       RENDER HISTORY
+    ========================================================= */
+
+    function renderHistory() {
+
+      const history =
+        getHistory();
+
+
+      if (!history.length) {
+
+        historyEl.innerHTML =
+          `
+          <div class="empty">
+            No recent signals
+          </div>
+          `;
+
+        return;
+
+      }
+
+
+      historyEl.innerHTML =
+        history
+          .map(
+            function (item) {
+
+              return `
+                <div
+                  class="history-item"
+                  data-id="${escapeHtml(item.id)}"
+                >
+
+                  <div class="history-title">
+                    ${escapeHtml(item.title)}
+                  </div>
+
+                  <div class="history-time">
+                    ${new Date(item.time).toLocaleString()}
+                  </div>
+
+                </div>
+              `;
+
+            }
+          )
+          .join("");
+
+
+      document
+        .querySelectorAll(".history-item")
+        .forEach(
+          function (item) {
+
+            item.addEventListener(
+              "click",
+              function () {
+
+                const id =
+                  item.getAttribute(
+                    "data-id"
+                  );
+
+                loadVideoById(id);
+
+              }
+            );
+
+          }
+        );
+
+    }
+
+
+    /* =========================================================
+       HTML ESCAPE
+    ========================================================= */
+
+    function escapeHtml(value) {
+
+      return String(value)
+        .replaceAll(
+          "&",
+          "&amp;"
+        )
+        .replaceAll(
+          "<",
+          "&lt;"
+        )
+        .replaceAll(
+          ">",
+          "&gt;"
+        )
+        .replaceAll(
+          '"',
+          "&quot;"
+        )
+        .replaceAll(
+          "'",
+          "&#039;"
+        );
+
+    }
+
+
+    /* =========================================================
+       LOAD VIDEO BY ID
+    ========================================================= */
+
+    async function loadVideoById(id) {
+
+      if (!id) return;
+
+
+      videoTitle.textContent =
+        "Loading...";
+
+
+      videoStatus.textContent =
+        "Loading authorized media...";
+
+
+      try {
+
+        const response =
+          await fetch(
+            API_BASE +
+            "/api/video?id=" +
+            encodeURIComponent(id)
+          );
+
+
+        const data =
+          await response.json();
+
+
+        if (
+          !response.ok ||
+          !data.ok
+        ) {
+
+          throw new Error(
+            data.error ||
+            "Video unavailable"
+          );
+
+        }
+
+
+        videoTitle.textContent =
+          data.title ||
+          "BoJhX Video";
+
+
+        player.src =
+          data.url;
+
+
+        player.load();
+
+
+        videoStatus.textContent =
+          "READY • Authorized stream";
+
+
+        saveHistory({
+
+          id: id,
+
+          title:
+            data.title ||
+            "BoJhX Video",
+
+          time:
+            Date.now()
+
+        });
+
+
+      } catch (error) {
+
+        videoTitle.textContent =
+          "Video unavailable";
+
+
+        videoStatus.textContent =
+          error.message ||
+          "Unable to load video.";
+
+
+        console.error(
+          "[BoJhX] Video error:",
+          error
+        );
+
+      }
+
+    }
+
+
+    /* =========================================================
+       START PARAMETER
+    ========================================================= */
+
+    function getStartParam() {
+
+      if (
+        tg &&
+        tg.initDataUnsafe &&
+             tg.initDataUnsafe.start_param
+    ) {
+
+      return (
+        tg.initDataUnsafe.start_param
+      );
+
+    }
+
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+
+    return (
+      params.get("startapp") ||
+      params.get("start") ||
+      ""
     );
 
+  }
 
-    let data;
+
+  /* =========================================================
+     AUTO LOAD VIDEO
+  ========================================================= */
+
+  async function autoLoadVideo() {
+
+    const id =
+      getStartParam();
+
+
+    if (!id) {
+
+      return;
+
+    }
+
+
+    if (
+      !/^v_[A-Za-z0-9_-]+$/.test(id)
+    ) {
+
+      console.warn(
+        "[BoJhX] Invalid video start parameter:",
+        id
+      );
+
+      return;
+
+    }
+
+
+    await loadVideoById(id);
+
+  }
+
+
+  /* =========================================================
+     DIRECT AUTHORIZED VIDEO URL
+  ========================================================= */
+
+  function playDirectUrl() {
+
+    const url =
+      videoUrl.value.trim();
+
+
+    if (!url) {
+
+      videoStatus.textContent =
+        "Please enter an authorized video URL.";
+
+      return;
+
+    }
 
 
     try {
 
-      data =
-        await response.json();
+      const parsed =
+        new URL(url);
 
-    } catch {
 
-      throw new Error(
-        "Worker returned invalid JSON."
-      );
+      if (
+        parsed.protocol !==
+        "https:"
+      ) {
 
-    }
+        throw new Error(
+          "Only HTTPS URLs are allowed."
+        );
 
+      }
 
-    if (
-      !response.ok ||
-      !data.ok ||
-      !data.user
-    ) {
+    } catch (error) {
 
-      statusEl.textContent =
-        "FAILED";
+      videoStatus.textContent =
+        "Invalid HTTPS video URL.";
 
-      statusEl.className =
-        "value danger";
-
-      nameEl.textContent =
-        "Authentication failed";
-
-      planEl.textContent =
-        "LOCKED";
-
-      showDiagnostic(
-        "Worker response: " +
-        (
-          data.error ||
-          "Unknown authentication error"
-        ) +
-        " (HTTP " +
-        response.status +
-        ")"
-      );
-
-      return false;
-
-    }
-
-
-    /* SUCCESS */
-
-    currentUser =
-      data.user;
-
-
-    statusEl.textContent =
-      "VERIFIED";
-
-    statusEl.className =
-      "value success";
-
-
-    nameEl.textContent =
-      currentUser.first_name ||
-      currentUser.username ||
-      "Telegram User";
-
-
-    if (currentUser.premium) {
-
-      planEl.textContent =
-        "PREMIUM";
-
-      planEl.className =
-        "value success";
-
-    } else {
-
-      planEl.textContent =
-        "FREE";
-
-      planEl.className =
-        "value";
-
-    }
-
-
-    showSuccess(
-      "Telegram identity verified successfully."
-    );
-
-
-    console.log(
-      "[BoJhX] Authentication successful",
-      currentUser
-    );
-
-
-    return true;
-
-
-  } catch (error) {
-
-    clearTimeout(timeout);
-
-
-    statusEl.textContent =
-      "FAILED";
-
-    statusEl.className =
-      "value danger";
-
-    nameEl.textContent =
-      "Connection error";
-
-    planEl.textContent =
-      "LOCKED";
-
-
-    if (
-      error.name ===
-      "AbortError"
-    ) {
-
-      showDiagnostic(
-        "Worker request timed out after 10 seconds."
-      );
-
-    } else {
-
-      showDiagnostic(
-        "Request error: " +
-        (
-          error.message ||
-          "Unknown error"
-        )
-      );
-
-    }
-
-
-    return false;
-
-  }
-
-}
-
-
-/* =========================================================
-   HISTORY
-========================================================= */
-
-function getHistory() {
-
-  try {
-
-    return JSON.parse(
-      localStorage.getItem(
-        HISTORY_KEY
-      ) || "[]"
-    );
-
-  } catch {
-
-    return [];
-
-  }
-
-}
-
-
-function saveHistory(item) {
-
-  let history =
-    getHistory();
-
-
-  history =
-    history.filter(
-      x => x.id !== item.id
-    );
-
-
-  history.unshift(item);
-
-
-  history =
-    history.slice(0, 8);
-
-
-  try {
-
-    localStorage.setItem(
-      HISTORY_KEY,
-      JSON.stringify(history)
-    );
-
-  } catch {
-
-    console.warn(
-      "[BoJhX] Unable to save history"
-    );
-
-  }
-
-
-  renderHistory();
-
-}
-
-
-function renderHistory() {
-
-  const history =
-    getHistory();
-
-
-  if (!history.length) {
-
-    historyEl.innerHTML =
-      `
-      <div class="empty">
-        No recent signals
-      </div>
-      `;
-
-    return;
-
-  }
-
-
-  historyEl.innerHTML =
-    history.map(
-      item => `
-        <div
-          class="history-item"
-          data-id="${escapeHtml(item.id)}"
-        >
-
-          <div class="history-title">
-            ${escapeHtml(item.title)}
-          </div>
-
-          <div class="history-time">
-            ${new Date(item.time).toLocaleString()}
-          </div>
-
-        </div>
-      `
-    ).join("");
-
-
-  document
-    .querySelectorAll(".history-item")
-    .forEach(item => {
-
-      item.addEventListener(
-        "click",
-        () => {
-
-          const id =
-            item.getAttribute(
-              "data-id"
-            );
-
-          loadVideoById(id);
-
-        }
-      );
-
-    });
-
-}
-
-
-/* =========================================================
-   HTML ESCAPE
-========================================================= */
-
-function escapeHtml(value) {
-
-  return String(value)
-    .replaceAll(
-      "&",
-      "&amp;"
-    )
-    .replaceAll(
-      "<",
-      "&lt;"
-    )
-    .replaceAll(
-      ">",
-      "&gt;"
-    )
-    .replaceAll(
-      '"',
-      "&quot;"
-    )
-    .replaceAll(
-      "'",
-      "&#039;"
-    );
-
-}
-
-
-/* =========================================================
-   VIDEO BY ID
-========================================================= */
-
-async function loadVideoById(id) {
-
-  if (!id) return;
-
-
-  videoTitle.textContent =
-    "Loading...";
-
-  videoStatus.textContent =
-    "Loading authorized media...";
-
-
-  try {
-
-    const response =
-      await fetch(
-        API_BASE +
-        "/api/video?id=" +
-        encodeURIComponent(id)
-      );
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      !response.ok ||
-      !data.ok
-    ) {
-
-      throw new Error(
-        data.error ||
-        "Video unavailable"
-      );
+      return;
 
     }
 
 
     videoTitle.textContent =
-      data.title ||
-      "BoJhX Video";
+      "Direct Media";
+
+
+    videoStatus.textContent =
+      "Loading authorized media...";
 
 
     player.src =
-      data.url;
+      url;
 
 
     player.load();
 
 
-    videoStatus.textContent =
-      "READY • Authorized stream";
-
-
-    saveHistory({
-
-      id: id,
-
-      title:
-        data.title ||
-        "BoJhX Video",
-
-      time:
-        Date.now()
-
-    });
-
-
-  } catch (error) {
-
-    videoTitle.textContent =
-      "Video unavailable";
-
-    videoStatus.textContent =
-      error.message ||
-      "Unable to load video.";
-
-  }
-
-}
-
-
-/* =========================================================
-   START PARAMETER
-========================================================= */
-
-function getStartParam() {
-
-  /*
-    Used only for video routing.
-    NOT used for authentication.
-  */
-
-  if (
-    tg &&
-    tg.initDataUnsafe &&
-    tg.initDataUnsafe.start_param
-  ) {
-
-    return (
-      tg.initDataUnsafe.start_param
-    );
+    player
+      .play()
+      .catch(
+        function () {}
+      );
 
   }
 
 
-  const params =
-    new URLSearchParams(
-      window.location.search
-    );
+  /* =========================================================
+     PLAY BUTTON
+  ========================================================= */
 
+  playBtn.addEventListener(
+    "click",
+    function () {
 
-  return (
-    params.get("startapp") ||
-    params.get("start") ||
-    ""
+      playDirectUrl();
+
+    }
   );
 
-}
+
+  videoUrl.addEventListener(
+    "keydown",
+    function (event) {
+
+      if (
+        event.key ===
+        "Enter"
+      ) {
+
+        playDirectUrl();
+
+      }
+
+    }
+  );
 
 
-/* =========================================================
-   AUTO LOAD VIDEO
-========================================================= */
+  /* =========================================================
+     VIDEO EVENTS
+  ========================================================= */
 
-async function autoLoadVideo() {
+  player.addEventListener(
+    "loadstart",
+    function () {
 
-  const id =
-    getStartParam();
+      videoStatus.textContent =
+        "Connecting...";
+
+    }
+  );
 
 
-  if (!id) return;
+  player.addEventListener(
+    "loadedmetadata",
+    function () {
+
+      videoStatus.textContent =
+        "MEDIA DETECTED";
+
+    }
+  );
 
 
-  /*
-    Only accept our own video ID format.
-  */
+  player.addEventListener(
+    "canplay",
+    function () {
 
-  if (
-    !/^v_[A-Za-z0-9_-]+$/.test(id)
-  ) {
+      videoStatus.textContent =
+        "READY • Stream available";
 
-    console.warn(
-      "[BoJhX] Invalid video start parameter"
+    }
+  );
+
+
+  player.addEventListener(
+    "playing",
+    function () {
+
+      videoStatus.textContent =
+        "PLAYING • NEXUS STREAM";
+
+    }
+  );
+
+
+  player.addEventListener(
+    "waiting",
+    function () {
+
+      videoStatus.textContent =
+        "BUFFERING...";
+
+    }
+  );
+
+
+  player.addEventListener(
+    "error",
+    function () {
+
+      videoStatus.textContent =
+        "Playback error.";
+
+    }
+  );
+
+
+  player.addEventListener(
+    "ended",
+    function () {
+
+      videoStatus.textContent =
+        "PLAYBACK COMPLETE";
+
+    }
+  );
+
+
+  /* =========================================================
+     START APPLICATION
+  ========================================================= */
+
+  async function startApp() {
+
+    console.log(
+      "[BoJhX] Application starting..."
     );
 
-    return;
 
-  }
-
-
-  await loadVideoById(id);
-
-}
+    renderHistory();
 
 
-/* =========================================================
-   DIRECT AUTHORIZED URL
-========================================================= */
+    try {
 
-function playDirectUrl() {
+      initializeTelegram();
 
-  const url =
-    videoUrl.value.trim();
+    } catch (error) {
 
-
-  if (!url) {
-
-    videoStatus.textContent =
-      "Please enter an authorized video URL.";
-
-    return;
-
-  }
-
-
-  try {
-
-    const parsed =
-      new URL(url);
-
-
-    if (
-      parsed.protocol !==
-      "https:"
-    ) {
-
-      throw new Error(
-        "Only HTTPS video URLs are allowed."
+      console.error(
+        "[BoJhX] Telegram initialization error:",
+        error
       );
+
+      return;
 
     }
 
 
-  } catch {
+    await authenticateUser();
 
-    videoStatus.textContent =
-      "Invalid HTTPS video URL.";
 
-    return;
+    await autoLoadVideo();
+
+
+    console.log(
+      "[BoJhX] Application initialized."
+    );
 
   }
 
 
-  videoTitle.textContent =
-    "Direct Media";
+  /* =========================================================
+     BOOT
+  ========================================================= */
 
-  videoStatus.textContent =
-    "Loading authorized media...";
+  startApp();
 
+</script>
 
-  player.src =
-    url;
-
-  player.load();
-
-
-  player.play()
-    .catch(() => {});
+</body>
+</html>
