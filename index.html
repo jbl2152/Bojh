@@ -1021,15 +1021,25 @@
 
 
           showDiagnostic(
-            "Worker response: " +
-            (
-              data.error ||
-              "Unknown authentication error"
-            ) +
-            " (HTTP " +
-            response.status +
-            ")"
-          );
+  "Worker response: " +
+  (
+    data.error ||
+    "Unknown authentication error"
+  ) +
+  " (HTTP " +
+  response.status +
+  ")" +
+  (
+    data.debug
+      ? "\n\nDIAGNOSTIC:\n" +
+        JSON.stringify(
+          data.debug,
+          null,
+          2
+        )
+      : ""
+  )
+);
 
 
           return false;
