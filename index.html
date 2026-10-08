@@ -1,1488 +1,1491 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-  >
-
-  <title>BoJhX Player</title>
-
-  <!-- Telegram Mini App SDK -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-  <style>
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html,
-    body {
-      min-height: 100%;
-    }
-
-    body {
-      min-height: 100vh;
-      background:
-        radial-gradient(
-          circle at top,
-          #10221e 0%,
-          #07100e 45%,
-          #030706 100%
-        );
-      color: #eafff8;
-      font-family:
-        Inter,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-      padding: 16px;
-    }
-
-    button,
-    input {
-      font: inherit;
-    }
-
-    .app {
-      width: 100%;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-
-    /* ================= TOP ================= */
-
-    .topbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 18px;
-    }
-
-    .brand {
-      font-size: 22px;
-      font-weight: 900;
-      letter-spacing: 2px;
-    }
-
-    .brand span {
-      color: #48ffb0;
-    }
-
-    .online {
-      color: #52ffb5;
-      border: 1px solid #205b47;
-      background: #092018;
-      border-radius: 20px;
-      padding: 7px 11px;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 1px;
-      white-space: nowrap;
-    }
-
-    /* ================= MAIN ================= */
-
-    .hero {
-      border: 1px solid #173d32;
-      border-radius: 24px;
-      padding: 22px;
-      background: rgba(5, 15, 12, 0.96);
-      box-shadow:
-        0 20px 70px rgba(0, 0, 0, 0.45);
-    }
-
-    .label {
-      color: #68aa98;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-    }
-
-    h1 {
-      font-size: 46px;
-      line-height: 0.95;
-      letter-spacing: -2px;
-      margin-bottom: 12px;
-    }
-
-    .subtitle {
-      color: #88a99f;
-      font-size: 14px;
-      margin-bottom: 25px;
-    }
-
-    .section {
-      margin-top: 22px;
-    }
-
-    .section-title {
-      color: #79a99b;
-      font-size: 10px;
-      font-weight: 900;
-      letter-spacing: 2px;
-      margin-bottom: 9px;
-    }
-
-    /* ================= IDENTITY ================= */
-
-    .identity {
-      border: 1px solid #174237;
-      background: #030d0a;
-      border-radius: 18px;
-      padding: 15px;
-    }
-
-    .row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 7px 0;
-    }
-
-    .key {
-      color: #6e9389;
-      font-size: 12px;
-    }
-
-    .value {
-      color: #ecfff8;
-      font-size: 12px;
-      font-weight: 900;
-      text-align: right;
-      word-break: break-word;
-    }
-
-    .success {
-      color: #4dffad !important;
-    }
-
-    .danger {
-      color: #ff6976 !important;
-    }
-
-    .warning {
-      color: #ffc866 !important;
-    }
-
-    /* ================= DIAGNOSTIC ================= */
-
-    .diagnostic {
-      display: none;
-      margin-top: 10px;
-      border: 1px solid #5b292f;
-      background: #1a090c;
-      border-radius: 14px;
-      padding: 12px;
-      color: #ff929a;
-      font-size: 11px;
-      line-height: 1.5;
-      word-break: break-word;
-    }
-
-    /* ================= PLAYER ================= */
-
-    .player {
-      border: 1px solid #174237;
-      border-radius: 18px;
-      overflow: hidden;
-      background: #000;
-    }
-
-    video {
-      display: block;
-      width: 100%;
-      max-height: 420px;
-      background: #000;
-    }
-
-    .player-info {
-      padding: 14px;
-      background: #020807;
-      border-top: 1px solid #14352c;
-    }
-
-    .title {
-      color: #ecfff8;
-      font-size: 14px;
-      font-weight: 900;
-      margin-bottom: 5px;
-    }
-
-    .video-status {
-      color: #6f958b;
-      font-size: 11px;
-    }
-
-    /* ================= INPUT ================= */
-
-    .input-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 9px;
-    }
-
-    input {
-      width: 100%;
-      padding: 15px;
-      border-radius: 14px;
-      border: 1px solid #194538;
-      background: #030d0a;
-      color: #ffffff;
-      outline: none;
-      font-size: 13px;
-    }
-
-    input::placeholder {
-      color: #5e7770;
-    }
-
-    input:focus {
-      border-color: #45eaa1;
-    }
-
-    button {
-      width: 100%;
-      padding: 15px;
-      border: 0;
-      border-radius: 14px;
-      background: #42e9a0;
-      color: #03110b;
-      font-weight: 900;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    button:active {
-      transform: scale(0.99);
-    }
-
-    /* ================= SYSTEM ================= */
-
-    .system {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 9px;
-    }
-
-    .card {
-      border: 1px solid #173b31;
-      background: #06120e;
-      border-radius: 15px;
-      padding: 15px 8px;
-      text-align: center;
-    }
-
-    .card strong {
-      display: block;
-      color: #52f5ad;
-      margin-bottom: 5px;
-      font-size: 13px;
-    }
-
-    .card span {
-      color: #65867e;
-      font-size: 9px;
-      letter-spacing: 1px;
-    }
-
-    /* ================= HISTORY ================= */
-
-    .history {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .history-item,
-    .empty {
-      border: 1px solid #15372e;
-      background: #06100d;
-      border-radius: 13px;
-      padding: 12px;
-    }
-
-    .history-item {
-      cursor: pointer;
-    }
-
-    .history-item:active {
-      border-color: #42e9a0;
-    }
-
-    .history-title {
-      color: #eafff8;
-      font-size: 12px;
-      font-weight: 800;
-    }
-
-    .history-time {
-      color: #66877f;
-      font-size: 10px;
-      margin-top: 3px;
-    }
-
-    .empty {
-      color: #55736c;
-      text-align: center;
-      font-size: 11px;
-    }
-
-    /* ================= FOOTER ================= */
-
-    .footer {
-      text-align: center;
-      color: #3d5b54;
-      font-size: 9px;
-      letter-spacing: 1px;
-      padding: 20px 0 8px;
-    }
-
-    /* ================= MOBILE ================= */
-
-    @media (max-width: 430px) {
-
-      body {
-        padding: 12px;
-      }
-
-      .hero {
-        padding: 17px;
-      }
-
-      h1 {
-        font-size: 40px;
-      }
-
-      .brand {
-        font-size: 19px;
-      }
-
-    }
-
-  </style>
+<meta charset="UTF-8">
+
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1,viewport-fit=cover"
+>
+
+<title>BoJhX Player</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<style>
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  min-height:100vh;
+  background:
+    radial-gradient(
+      circle at top,
+      #10221e 0%,
+      #07100e 45%,
+      #030706 100%
+    );
+  color:#eafff8;
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+  padding:12px;
+}
+
+.app{
+  max-width:760px;
+  margin:auto;
+}
+
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:14px;
+}
+
+.brand{
+  font-size:21px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+.brand span{
+  color:#48ffb0;
+}
+
+.online{
+  color:#52ffb5;
+  border:1px solid #205b47;
+  background:#092018;
+  border-radius:20px;
+  padding:7px 11px;
+  font-size:10px;
+  font-weight:900;
+}
+
+.hero{
+  border:1px solid #173d32;
+  border-radius:24px;
+  padding:17px;
+  background:rgba(5,15,12,.96);
+  box-shadow:0 20px 70px rgba(0,0,0,.45);
+}
+
+.label,
+.section-title{
+  color:#79a99b;
+  font-size:10px;
+  font-weight:900;
+  letter-spacing:2px;
+}
+
+h1{
+  font-size:40px;
+  line-height:.95;
+  letter-spacing:-2px;
+  margin:7px 0 10px;
+}
+
+.subtitle{
+  color:#88a99f;
+  font-size:13px;
+  margin-bottom:18px;
+}
+
+.section{
+  margin-top:20px;
+}
+
+.section-title{
+  margin-bottom:9px;
+}
+
+.identity,
+.player,
+.library-box{
+  border:1px solid #174237;
+  background:#030d0a;
+  border-radius:18px;
+  overflow:hidden;
+}
+
+.identity{
+  padding:12px;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  padding:6px 0;
+}
+
+.key{
+  color:#6e9389;
+  font-size:11px;
+}
+
+.value{
+  font-size:11px;
+  font-weight:900;
+  text-align:right;
+}
+
+.success{
+  color:#4dffad;
+}
+
+.danger{
+  color:#ff6976;
+}
+
+.warning{
+  color:#ffc866;
+}
+
+.diagnostic{
+  display:none;
+  margin-top:10px;
+  border:1px solid #5b292f;
+  background:#1a090c;
+  border-radius:14px;
+  padding:11px;
+  color:#ff929a;
+  font-size:10px;
+  white-space:pre-wrap;
+  word-break:break-word;
+}
+
+video{
+  display:block;
+  width:100%;
+  max-height:430px;
+  background:#000;
+}
+
+.player-info{
+  padding:12px;
+  background:#020807;
+  border-top:1px solid #14352c;
+}
+
+.title{
+  font-size:14px;
+  font-weight:900;
+}
+
+.video-status{
+  color:#6f958b;
+  font-size:10px;
+  margin-top:4px;
+}
+
+.search-wrap{
+  padding:10px;
+}
+
+.search{
+  width:100%;
+  padding:13px;
+  border-radius:14px;
+  border:1px solid #194538;
+  background:#030d0a;
+  color:#fff;
+  outline:none;
+  font-size:13px;
+}
+
+.search:focus{
+  border-color:#45eaa1;
+}
+
+.library{
+  display:grid;
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+  gap:9px;
+  padding:10px;
+}
+
+.video-card{
+  border:1px solid #15372e;
+  background:#06100d;
+  border-radius:14px;
+  padding:11px;
+  cursor:pointer;
+  min-width:0;
+  transition:.15s;
+}
+
+.video-card:active{
+  border-color:#42e9a0;
+  transform:scale(.98);
+}
+
+.video-card-title{
+  font-size:12px;
+  font-weight:900;
+  line-height:1.3;
+
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.video-card-meta{
+  font-size:9px;
+  color:#66877f;
+  margin-top:5px;
+}
+
+.play-small{
+  margin-top:9px;
+  width:100%;
+  padding:9px;
+  border:0;
+  border-radius:10px;
+  background:#42e9a0;
+  color:#03110b;
+  font-size:10px;
+  font-weight:900;
+}
+
+.empty{
+  grid-column:1/-1;
+  padding:18px;
+  text-align:center;
+  color:#55736c;
+  font-size:11px;
+}
+
+.loading{
+  grid-column:1/-1;
+  padding:18px;
+  text-align:center;
+  color:#68aa98;
+  font-size:11px;
+}
+
+.system{
+  display:grid;
+  grid-template-columns:
+    repeat(3,1fr);
+  gap:8px;
+}
+
+.card{
+  border:1px solid #173b31;
+  background:#06120e;
+  border-radius:14px;
+  padding:13px 5px;
+  text-align:center;
+}
+
+.card strong{
+  display:block;
+  color:#52f5ad;
+  font-size:12px;
+}
+
+.card span{
+  color:#65867e;
+  font-size:8px;
+  letter-spacing:1px;
+}
+
+.footer{
+  text-align:center;
+  color:#3d5b54;
+  font-size:9px;
+  letter-spacing:1px;
+  padding:18px 0 6px;
+}
+
+@media(max-width:430px){
+
+  .library{
+    grid-template-columns:
+      1fr 1fr;
+  }
+
+  .hero{
+    padding:15px;
+  }
+
+}
+
+</style>
 </head>
 
 
 <body>
 
-  <div class="app">
+<div class="app">
 
-    <!-- TOP BAR -->
+  <!-- TOP BAR -->
 
-    <div class="topbar">
+  <div class="topbar">
 
-      <div class="brand">
-        BoJhX<span>/</span>NEXUS
-      </div>
-
-      <div class="online">
-        ONLINE
-      </div>
-
+    <div class="brand">
+      BoJhX<span>/</span>NEXUS
     </div>
 
-
-    <!-- MAIN -->
-
-    <div class="hero">
-
-      <div class="label">
-        PRIVATE MEDIA SPACE
-      </div>
-
-      <h1>
-        NEXUS<br>
-        PLAYER
-      </h1>
-
-      <div class="subtitle">
-        Your media. Your control.
-      </div>
-
-
-      <!-- ================= IDENTITY ================= -->
-
-      <div class="section">
-
-        <div class="section-title">
-          NEXUS IDENTITY
-        </div>
-
-        <div class="identity">
-
-          <div class="row">
-
-            <span class="key">
-              STATUS
-            </span>
-
-            <span
-              id="identityStatus"
-              class="value"
-            >
-              STARTING...
-            </span>
-
-          </div>
-
-
-          <div class="row">
-
-            <span class="key">
-              USER
-            </span>
-
-            <span
-              id="identityName"
-              class="value"
-            >
-              —
-            </span>
-
-          </div>
-
-
-          <div class="row">
-
-            <span class="key">
-              PLAN
-            </span>
-
-            <span
-              id="identityPlan"
-              class="value warning"
-            >
-              LOCKED
-            </span>
-
-          </div>
-
-
-          <div class="row">
-
-            <span class="key">
-              STAGE
-            </span>
-
-            <span
-              id="identityStage"
-              class="value"
-            >
-              0 / 5
-            </span>
-
-          </div>
-
-        </div>
-
-
-        <div
-          id="diagnostic"
-          class="diagnostic"
-        ></div>
-
-      </div>
-
-
-      <!-- ================= PLAYER ================= -->
-
-      <div class="section">
-
-        <div class="section-title">
-          PLAYER STANDBY
-        </div>
-
-
-        <div class="player">
-
-          <video
-            id="videoPlayer"
-            controls
-            playsinline
-            preload="metadata"
-          ></video>
-
-
-          <div class="player-info">
-
-            <div
-              id="videoTitle"
-              class="title"
-            >
-              No video loaded
-            </div>
-
-
-            <div
-              id="videoStatus"
-              class="video-status"
-            >
-              Waiting for authorized media...
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- ================= DIRECT URL ================= -->
-
-      <div class="section">
-
-        <div class="section-title">
-          AUTHORIZED VIDEO URL
-        </div>
-
-
-        <div class="input-wrap">
-
-          <input
-            id="videoUrl"
-            type="url"
-            placeholder="Paste your authorized video URL..."
-            autocomplete="off"
-          >
-
-
-          <button
-            id="playBtn"
-            type="button"
-          >
-            ▶ PLAY VIDEO
-          </button>
-
-        </div>
-
-      </div>
-
-
-      <!-- ================= SYSTEM ================= -->
-
-      <div class="section">
-
-        <div class="section-title">
-          NEXUS SYSTEM
-        </div>
-
-
-        <div class="system">
-
-          <div class="card">
-            <strong>FAST</strong>
-            <span>STREAM</span>
-          </div>
-
-
-          <div class="card">
-            <strong>PRIVATE</strong>
-            <span>ACCESS</span>
-          </div>
-
-
-          <div class="card">
-            <strong>HD</strong>
-            <span>QUALITY</span>
-          </div>
-
-        </div>
-
-      </div>
-
-
-      <!-- ================= HISTORY ================= -->
-
-      <div class="section">
-
-        <div class="section-title">
-          RECENT SIGNALS
-        </div>
-
-
-        <div
-          id="history"
-          class="history"
-        ></div>
-
-      </div>
-
-    </div>
-
-
-    <div class="footer">
-      BOJHX PLAYER • NEXUS SYSTEM
+    <div class="online">
+      ONLINE
     </div>
 
   </div>
 
 
-  <!-- =====================================================
-       JAVASCRIPT
-  ====================================================== -->
-
-  <script>
-
-    "use strict";
+  <div class="hero">
 
 
-    /* =====================================================
-       CONFIGURATION
-    ===================================================== */
+    <!-- HEADER -->
 
-    const API_BASE =
-      "https://bojhx-bot.alexa215225.workers.dev";
+    <div class="label">
+      PRIVATE MEDIA SPACE
+    </div>
 
-    const HISTORY_KEY =
-      "bojhx_nexus_history";
+    <h1>
+      NEXUS<br>
+      PLAYER
+    </h1>
 
-
-    /* =====================================================
-       TELEGRAM
-    ===================================================== */
-
-    const tg =
-      window.Telegram &&
-      window.Telegram.WebApp
-        ? window.Telegram.WebApp
-        : null;
+    <div class="subtitle">
+      Your media. Your control.
+    </div>
 
 
-    /* =====================================================
-       GLOBAL STATE
-    ===================================================== */
+    <!-- IDENTITY -->
 
-    let currentUser = null;
+    <div class="section">
+
+      <div class="section-title">
+        NEXUS IDENTITY
+      </div>
+
+      <div class="identity">
+
+        <div class="row">
+          <span class="key">
+            STATUS
+          </span>
+
+          <span
+            id="identityStatus"
+            class="value"
+          >
+            STARTING...
+          </span>
+        </div>
 
 
-    /* =====================================================
-       DOM ELEMENTS
-    ===================================================== */
+        <div class="row">
 
-    const statusEl =
-      document.getElementById(
-        "identityStatus"
+          <span class="key">
+            USER
+          </span>
+
+          <span
+            id="identityName"
+            class="value"
+          >
+            —
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span class="key">
+            PLAN
+          </span>
+
+          <span
+            id="identityPlan"
+            class="value warning"
+          >
+            LOCKED
+          </span>
+
+        </div>
+
+
+        <div class="row">
+
+          <span class="key">
+            STAGE
+          </span>
+
+          <span
+            id="identityStage"
+            class="value"
+          >
+            0 / 5
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="diagnostic"
+        class="diagnostic"
+      ></div>
+
+    </div>
+
+
+    <!-- PLAYER -->
+
+    <div class="section">
+
+      <div class="section-title">
+        PLAYER
+      </div>
+
+      <div class="player">
+
+        <video
+          id="videoPlayer"
+          controls
+          playsinline
+          preload="metadata"
+        ></video>
+
+
+        <div class="player-info">
+
+          <div
+            id="videoTitle"
+            class="title"
+          >
+            No video loaded
+          </div>
+
+          <div
+            id="videoStatus"
+            class="video-status"
+          >
+            Select a video from the library.
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- VIDEO LIBRARY -->
+
+    <div class="section">
+
+      <div class="section-title">
+        VIDEO LIBRARY
+      </div>
+
+      <div class="library-box">
+
+
+        <!-- SEARCH -->
+
+        <div class="search-wrap">
+
+          <input
+            id="searchInput"
+            class="search"
+            type="search"
+            placeholder="🔎 Search videos..."
+            autocomplete="off"
+          >
+
+        </div>
+
+
+        <!-- LIBRARY -->
+
+        <div
+          id="library"
+          class="library"
+        >
+
+          <div class="loading">
+            Loading library...
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- SYSTEM -->
+
+    <div class="section">
+
+      <div class="section-title">
+        NEXUS SYSTEM
+      </div>
+
+      <div class="system">
+
+        <div class="card">
+
+          <strong>
+            FAST
+          </strong>
+
+          <span>
+            STREAM
+          </span>
+
+        </div>
+
+
+        <div class="card">
+
+          <strong>
+            PRIVATE
+          </strong>
+
+          <span>
+            ACCESS
+          </span>
+
+        </div>
+
+
+        <div class="card">
+
+          <strong>
+            HD
+          </strong>
+
+          <span>
+            QUALITY
+          </span>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="footer">
+    BOJHX PLAYER • NEXUS SYSTEM
+  </div>
+
+</div>
+
+
+<script>
+
+"use strict";
+
+
+/* =========================================================
+   CONFIG
+========================================================= */
+
+const API_BASE =
+  "https://bojhx-bot.alexa215225.workers.dev";
+
+
+/* =========================================================
+   TELEGRAM
+========================================================= */
+
+const tg =
+  window.Telegram &&
+  window.Telegram.WebApp
+    ? window.Telegram.WebApp
+    : null;
+
+
+/* =========================================================
+   ELEMENTS
+========================================================= */
+
+const statusEl =
+  document.getElementById(
+    "identityStatus"
+  );
+
+const nameEl =
+  document.getElementById(
+    "identityName"
+  );
+
+const planEl =
+  document.getElementById(
+    "identityPlan"
+  );
+
+const stageEl =
+  document.getElementById(
+    "identityStage"
+  );
+
+const diagnosticEl =
+  document.getElementById(
+    "diagnostic"
+  );
+
+const player =
+  document.getElementById(
+    "videoPlayer"
+  );
+
+const videoTitle =
+  document.getElementById(
+    "videoTitle"
+  );
+
+const videoStatus =
+  document.getElementById(
+    "videoStatus"
+  );
+
+const libraryEl =
+  document.getElementById(
+    "library"
+  );
+
+const searchInput =
+  document.getElementById(
+    "searchInput"
+  );
+
+
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentUser = null;
+
+let allVideos = [];
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function setStage(
+  number,
+  text
+){
+
+  stageEl.textContent =
+    number + " / 5";
+
+  statusEl.textContent =
+    text;
+
+}
+
+
+function showDiagnostic(
+  message
+){
+
+  diagnosticEl.textContent =
+    message;
+
+  diagnosticEl.style.display =
+    "block";
+
+}
+
+
+function showSuccess(
+  message
+){
+
+  diagnosticEl.textContent =
+    message;
+
+  diagnosticEl.style.display =
+    "block";
+
+  diagnosticEl.style.borderColor =
+    "#1b6047";
+
+  diagnosticEl.style.background =
+    "#061a12";
+
+  diagnosticEl.style.color =
+    "#62ffb7";
+
+}
+
+
+function hideDiagnostic(){
+
+  diagnosticEl.textContent =
+    "";
+
+  diagnosticEl.style.display =
+    "none";
+
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(
+  value
+){
+
+  return String(value)
+
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
+}
+
+
+/* =========================================================
+   DATE
+========================================================= */
+
+function formatDate(
+  timestamp
+){
+
+  if(!timestamp){
+    return "Authorized media";
+  }
+
+  try{
+
+    return new Date(
+      timestamp
+    ).toLocaleDateString(
+      undefined,
+      {
+        day:"2-digit",
+        month:"short",
+        year:"numeric"
+      }
+    );
+
+  }catch{
+
+    return "Authorized media";
+
+  }
+
+}
+
+
+/* =========================================================
+   TELEGRAM AUTHENTICATION
+========================================================= */
+
+async function authenticateUser(){
+
+  setStage(
+    3,
+    "READING AUTH DATA"
+  );
+
+  hideDiagnostic();
+
+
+  if(!tg){
+
+    statusEl.textContent =
+      "SDK NOT FOUND";
+
+    statusEl.className =
+      "value danger";
+
+    showDiagnostic(
+      "Open BoJhX Player from Telegram."
+    );
+
+    return false;
+
+  }
+
+
+  const initData =
+    tg.initData || "";
+
+
+  if(!initData){
+
+    statusEl.textContent =
+      "NO AUTH DATA";
+
+    statusEl.className =
+      "value danger";
+
+    showDiagnostic(
+      "Telegram did not provide initData."
+    );
+
+    return false;
+
+  }
+
+
+  setStage(
+    4,
+    "CONTACTING SERVER"
+  );
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_BASE + "/api/me",
+        {
+          method:"GET",
+
+          headers:{
+            "Authorization":
+              "Bearer " +
+              initData
+          }
+        }
       );
 
-    const nameEl =
-      document.getElementById(
-        "identityName"
+
+    setStage(
+      5,
+      "SERVER RESPONSE " +
+      response.status
+    );
+
+
+    let data;
+
+
+    try{
+
+      data =
+        await response.json();
+
+    }catch{
+
+      throw new Error(
+        "Worker returned invalid JSON."
       );
 
-    const planEl =
-      document.getElementById(
-        "identityPlan"
-      );
-
-    const stageEl =
-      document.getElementById(
-        "identityStage"
-      );
-
-    const diagnosticEl =
-      document.getElementById(
-        "diagnostic"
-      );
-
-    const player =
-      document.getElementById(
-        "videoPlayer"
-      );
-
-    const videoTitle =
-      document.getElementById(
-        "videoTitle"
-      );
-
-    const videoStatus =
-      document.getElementById(
-        "videoStatus"
-      );
-
-    const videoUrl =
-      document.getElementById(
-        "videoUrl"
-      );
-
-    const playBtn =
-      document.getElementById(
-        "playBtn"
-      );
-
-    const historyEl =
-      document.getElementById(
-        "history"
-      );
+    }
 
 
-    /* =====================================================
-       STAGE
-    ===================================================== */
-
-    function setStage(
-      number,
-      text
-    ) {
-
-      stageEl.textContent =
-        number + " / 5";
+    if(
+      !response.ok ||
+      !data.ok ||
+      !data.user
+    ){
 
       statusEl.textContent =
-        text;
+        "FAILED";
 
-      console.log(
-        "[BoJhX]",
-        number,
-        text
-      );
+      statusEl.className =
+        "value danger";
 
-    }
+      nameEl.textContent =
+        "Authentication failed";
 
+      planEl.textContent =
+        "LOCKED";
 
-    /* =====================================================
-       DIAGNOSTIC
-    ===================================================== */
 
-    function showDiagnostic(
-      message
-    ) {
+      showDiagnostic(
 
-      diagnosticEl.textContent =
-        message;
+        "Worker response: " +
 
-      diagnosticEl.style.display =
-        "block";
+        (
+          data.error ||
+          "Unknown authentication error"
+        ) +
 
-      diagnosticEl.style.borderColor =
-        "#5b292f";
+        " (HTTP " +
 
-      diagnosticEl.style.background =
-        "#1a090c";
+        response.status +
 
-      diagnosticEl.style.color =
-        "#ff929a";
+        ")" +
 
-    }
+        (
+          data.debug
 
+            ? "\n\nDIAGNOSTIC:\n" +
 
-    function showSuccess(
-      message
-    ) {
+              JSON.stringify(
+                data.debug,
+                null,
+                2
+              )
 
-      diagnosticEl.textContent =
-        message;
-
-      diagnosticEl.style.display =
-        "block";
-
-      diagnosticEl.style.borderColor =
-        "#1b6047";
-
-      diagnosticEl.style.background =
-        "#061a12";
-
-      diagnosticEl.style.color =
-        "#62ffb7";
-
-    }
-
-
-    function hideDiagnostic() {
-
-      diagnosticEl.textContent =
-        "";
-
-      diagnosticEl.style.display =
-        "none";
-
-    }
-
-
-    /* =====================================================
-       TELEGRAM INITIALIZATION
-    ===================================================== */
-
-    function initializeTelegram() {
-
-      setStage(
-        1,
-        "STARTING..."
-      );
-
-
-      if (!tg) {
-
-        statusEl.textContent =
-          "SDK NOT FOUND";
-
-        statusEl.className =
-          "value danger";
-
-        showDiagnostic(
-          "Telegram WebApp SDK was not detected. Open BoJhX Player from Telegram."
-        );
-
-        return false;
-
-      }
-
-
-      try {
-
-        tg.ready();
-
-        tg.expand();
-
-
-        setStage(
-          2,
-          "TELEGRAM READY"
-        );
-
-
-        return true;
-
-      } catch (error) {
-
-        statusEl.textContent =
-          "TELEGRAM ERROR";
-
-        statusEl.className =
-          "value danger";
-
-        showDiagnostic(
-          "Telegram initialization failed: " +
-          (
-            error.message ||
-            "Unknown error"
-          )
-        );
-
-        return false;
-
-      }
-
-    }
-
-
-    /* =====================================================
-       TELEGRAM AUTHENTICATION
-    ===================================================== */
-
-    async function authenticateUser() {
-
-      setStage(
-        3,
-        "READING AUTH DATA"
-      );
-
-
-      hideDiagnostic();
-
-
-      /*
-        IMPORTANT:
-
-        initData is the signed Telegram
-        Mini App authentication payload.
-
-        We NEVER use initDataUnsafe
-        for authentication.
-      */
-
-      const initData =
-        tg
-          ? tg.initData
-          : "";
-
-
-      if (!initData) {
-
-        statusEl.textContent =
-          "NO AUTH DATA";
-
-        statusEl.className =
-          "value danger";
-
-        nameEl.textContent =
-          "Telegram data unavailable";
-
-        planEl.textContent =
-          "LOCKED";
-
-        showDiagnostic(
-          "Telegram did not provide initData. Reopen BoJhX Player using Telegram's Open App button."
-        );
-
-        return false;
-
-      }
-
-
-      setStage(
-        4,
-        "CONTACTING SERVER"
-      );
-
-
-      const controller =
-        new AbortController();
-
-
-      const timeoutId =
-        setTimeout(
-          function () {
-
-            controller.abort();
-
-          },
-          10000
-        );
-
-
-      try {
-
-        const response =
-          await fetch(
-            API_BASE +
-            "/api/me",
-            {
-              method: "GET",
-
-              headers: {
-                "Authorization":
-                  "Bearer " +
-                  initData
-              },
-
-              signal:
-                controller.signal
-            }
-          );
-
-
-        clearTimeout(
-          timeoutId
-        );
-
-
-        setStage(
-          5,
-          "SERVER RESPONSE " +
-          response.status
-        );
-
-
-        let data;
-
-
-        try {
-
-          data =
-            await response.json();
-
-        } catch (error) {
-
-          throw new Error(
-            "Worker returned invalid JSON."
-          );
-
-        }
-
-
-        if (
-          !response.ok ||
-          !data.ok ||
-          !data.user
-        ) {
-
-          statusEl.textContent =
-            "FAILED";
-
-          statusEl.className =
-            "value danger";
-
-          nameEl.textContent =
-            "Authentication failed";
-
-          planEl.textContent =
-            "LOCKED";
-
-
-          showDiagnostic(
-  "Worker response: " +
-  (
-    data.error ||
-    "Unknown authentication error"
-  ) +
-  " (HTTP " +
-  response.status +
-  ")" +
-  (
-    data.debug
-      ? "\n\nDIAGNOSTIC:\n" +
-        JSON.stringify(
-          data.debug,
-          null,
-          2
+            : ""
         )
-      : ""
-  )
+
+      );
+
+
+      return false;
+
+    }
+
+
+    currentUser =
+      data.user;
+
+
+    statusEl.textContent =
+      "VERIFIED";
+
+    statusEl.className =
+      "value success";
+
+
+    nameEl.textContent =
+      currentUser.first_name ||
+      currentUser.username ||
+      "Telegram User";
+
+
+    if(
+      currentUser.premium
+    ){
+
+      planEl.textContent =
+        "PREMIUM";
+
+      planEl.className =
+        "value success";
+
+    }else{
+
+      planEl.textContent =
+        "FREE";
+
+      planEl.className =
+        "value";
+
+    }
+
+
+    showSuccess(
+      "Telegram identity verified successfully."
+    );
+
+
+    return true;
+
+
+  }catch(error){
+
+    statusEl.textContent =
+      "FAILED";
+
+    statusEl.className =
+      "value danger";
+
+    nameEl.textContent =
+      "Connection error";
+
+    planEl.textContent =
+      "LOCKED";
+
+
+    showDiagnostic(
+      "Request error: " +
+      (
+        error.message ||
+        "Unknown error"
+      )
+    );
+
+
+    return false;
+
+  }
+
+}
+
+
+/* =========================================================
+   LOAD VIDEO LIBRARY
+========================================================= */
+
+async function loadLibrary(){
+
+  libraryEl.innerHTML =
+    '<div class="loading">' +
+    'Loading library...' +
+    '</div>';
+
+
+  try{
+
+    const response =
+      await fetch(
+        API_BASE +
+        "/api/videos"
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      !data.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        "Library request failed"
+      );
+
+    }
+
+
+    allVideos =
+      Array.isArray(
+        data.videos
+      )
+        ? data.videos
+        : [];
+
+
+    renderLibrary(
+      allVideos
+    );
+
+
+  }catch(error){
+
+    libraryEl.innerHTML =
+
+      '<div class="empty">' +
+
+      'Library unavailable.<br>' +
+
+      escapeHtml(
+        error.message ||
+        "Unknown error"
+      ) +
+
+      '</div>';
+
+  }
+
+}
+
+
+/* =========================================================
+   RENDER LIBRARY
+========================================================= */
+
+function renderLibrary(
+  videos
+){
+
+  if(
+    !videos.length
+  ){
+
+    libraryEl.innerHTML =
+      '<div class="empty">' +
+      'No videos found.' +
+      '</div>';
+
+    return;
+
+  }
+
+
+  libraryEl.innerHTML =
+    videos.map(
+      video => {
+
+        const title =
+          escapeHtml(
+            video.title ||
+            "BoJhX Video"
+          );
+
+
+        const meta =
+          video.created_at
+            ? formatDate(
+                video.created_at
+              )
+            : "Authorized media";
+
+
+        return `
+
+          <div
+            class="video-card"
+            data-id="${escapeHtml(
+              video.id
+            )}"
+          >
+
+            <div
+              class="video-card-title"
+            >
+              ${title}
+            </div>
+
+
+            <div
+              class="video-card-meta"
+            >
+              ${escapeHtml(
+                meta
+              )}
+            </div>
+
+
+            <button
+              class="play-small"
+              type="button"
+            >
+              ▶ WATCH
+            </button>
+
+          </div>
+
+        `;
+
+      }
+    ).join("");
+
+
+  document
+    .querySelectorAll(
+      ".video-card"
+    )
+    .forEach(
+      card => {
+
+        card.addEventListener(
+          "click",
+          () => {
+
+            loadVideoById(
+              card.dataset.id
+            );
+
+          }
+        );
+
+      }
+    );
+
+}
+
+
+/* =========================================================
+   LOAD VIDEO
+========================================================= */
+
+async function loadVideoById(
+  id
+){
+
+  videoStatus.textContent =
+    "Loading video...";
+
+  videoTitle.textContent =
+    "Loading...";
+
+
+  try{
+
+    const response =
+      await fetch(
+
+        API_BASE +
+        "/api/video?id=" +
+        encodeURIComponent(id)
+
+      );
+
+
+    const data =
+      await response.json();
+
+
+    if(
+      !response.ok ||
+      !data.ok
+    ){
+
+      throw new Error(
+        data.error ||
+        "Video metadata failed"
+      );
+
+    }
+
+
+    player.pause();
+
+
+    player.src =
+      data.url;
+
+
+    player.load();
+
+
+    videoTitle.textContent =
+      data.title ||
+      "BoJhX Video";
+
+
+    videoStatus.textContent =
+      "Ready to play.";
+
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+
+  }catch(error){
+
+    videoStatus.textContent =
+      "Playback setup failed: " +
+
+      (
+        error.message ||
+        "Unknown error"
+      );
+
+  }
+
+}
+
+
+/* =========================================================
+   SEARCH
+========================================================= */
+
+searchInput.addEventListener(
+  "input",
+  () => {
+
+    const query =
+      searchInput.value
+        .trim()
+        .toLowerCase();
+
+
+    const filtered =
+      allVideos.filter(
+        video =>
+
+          String(
+            video.title || ""
+          )
+          .toLowerCase()
+          .includes(query)
+
+          ||
+
+          String(
+            video.file_name || ""
+          )
+          .toLowerCase()
+          .includes(query)
+      );
+
+
+    renderLibrary(
+      filtered
+    );
+
+  }
 );
 
 
-          return false;
+/* =========================================================
+   PLAYER EVENTS
+========================================================= */
 
-        }
+player.addEventListener(
+  "loadstart",
+  () => {
 
+    videoStatus.textContent =
+      "Loading stream...";
 
-        /* =========================
-           AUTH SUCCESS
-        ========================= */
+  }
+);
 
-        currentUser =
-          data.user;
 
+player.addEventListener(
+  "canplay",
+  () => {
 
-        statusEl.textContent =
-          "VERIFIED";
+    videoStatus.textContent =
+      "Ready to play.";
 
-        statusEl.className =
-          "value success";
+  }
+);
 
 
-        nameEl.textContent =
-          currentUser.first_name ||
-          currentUser.username ||
-          "Telegram User";
+player.addEventListener(
+  "playing",
+  () => {
 
+    videoStatus.textContent =
+      "▶ Playing";
 
-        if (
-          currentUser.premium
-        ) {
+  }
+);
 
-          planEl.textContent =
-            "PREMIUM";
 
-          planEl.className =
-            "value success";
+player.addEventListener(
+  "waiting",
+  () => {
 
-        } else {
+    videoStatus.textContent =
+      "Buffering...";
 
-          planEl.textContent =
-            "FREE";
+  }
+);
 
-          planEl.className =
-            "value";
 
-        }
+player.addEventListener(
+  "error",
+  () => {
 
+    videoStatus.textContent =
+      "Playback error. Check the authorized video source.";
 
-        showSuccess(
-          "Telegram identity verified successfully."
-        );
+  }
+);
 
 
-        console.log(
-          "[BoJhX] User verified:",
-          currentUser
-        );
+/* =========================================================
+   START
+========================================================= */
 
+async function start(){
 
-        return true;
+  setStage(
+    1,
+    "STARTING..."
+  );
 
 
-      } catch (error) {
+  if(!tg){
 
-        clearTimeout(
-          timeoutId
-        );
+    statusEl.textContent =
+      "SDK NOT FOUND";
 
+    statusEl.className =
+      "value danger";
 
-        statusEl.textContent =
-          "FAILED";
+    showDiagnostic(
+      "Open BoJhX Player from Telegram."
+    );
 
-        statusEl.className =
-          "value danger";
+    return;
 
+  }
 
-        nameEl.textContent =
-          "Connection error";
 
+  try{
 
-        planEl.textContent =
-          "LOCKED";
+    tg.ready();
 
+    tg.expand();
 
-        if (
-          error.name ===
-          "AbortError"
-        ) {
+    setStage(
+      2,
+      "TELEGRAM READY"
+    );
 
-          showDiagnostic(
-            "Worker request timed out after 10 seconds."
-          );
+  }catch(error){
 
-        } else {
+    statusEl.textContent =
+      "TELEGRAM ERROR";
 
-          showDiagnostic(
-            "Request error: " +
-            (
-              error.message ||
-              "Unknown error"
-            )
-          );
+    statusEl.className =
+      "value danger";
 
-        }
+    showDiagnostic(
+      error.message ||
+      "Telegram initialization failed."
+    );
 
+    return;
 
-        console.error(
-          "[BoJhX] Authentication error:",
-          error
-        );
+  }
 
 
-        return false;
+  const authenticated =
+    await authenticateUser();
 
-      }
 
-    }
+  if(
+    authenticated
+  ){
 
+    await loadLibrary();
 
-    /* =====================================================
-       HISTORY
-    ===================================================== */
 
-    function getHistory() {
-
-      try {
-
-        const data =
-          localStorage.getItem(
-            HISTORY_KEY
-          );
-
-
-        if (!data) {
-
-          return [];
-
-        }
-
-
-        const parsed =
-          JSON.parse(data);
-
-
-        return Array.isArray(
-          parsed
-        )
-          ? parsed
-          : [];
-
-
-      } catch (error) {
-
-        console.warn(
-          "[BoJhX] History read error:",
-          error
-        );
-
-        return [];
-
-      }
-
-    }
-
-
-    function saveHistory(
-      item
-    ) {
-
-      let history =
-        getHistory();
-
-
-      history =
-        history.filter(
-          function (oldItem) {
-
-            return (
-              oldItem.id !==
-              item.id
-            );
-
-          }
-        );
-
-
-      history.unshift(
-        item
-      );
-
-
-      history =
-              history.slice(
-        0,
-        8
-      );
-
-
-      try {
-
-        localStorage.setItem(
-          HISTORY_KEY,
-          JSON.stringify(
-            history
-          )
-        );
-
-      } catch (error) {
-
-        console.warn(
-          "[BoJhX] Unable to save history",
-          error
-        );
-
-      }
-
-
-      renderHistory();
-
-    }
-
-
-    /* =========================================================
-       RENDER HISTORY
-    ========================================================= */
-
-    function renderHistory() {
-
-      const history =
-        getHistory();
-
-
-      if (!history.length) {
-
-        historyEl.innerHTML =
-          `
-          <div class="empty">
-            No recent signals
-          </div>
-          `;
-
-        return;
-
-      }
-
-
-      historyEl.innerHTML =
-        history
-          .map(
-            function (item) {
-
-              return `
-                <div
-                  class="history-item"
-                  data-id="${escapeHtml(item.id)}"
-                >
-
-                  <div class="history-title">
-                    ${escapeHtml(item.title)}
-                  </div>
-
-                  <div class="history-time">
-                    ${new Date(item.time).toLocaleString()}
-                  </div>
-
-                </div>
-              `;
-
-            }
-          )
-          .join("");
-
-
-      document
-        .querySelectorAll(".history-item")
-        .forEach(
-          function (item) {
-
-            item.addEventListener(
-              "click",
-              function () {
-
-                const id =
-                  item.getAttribute(
-                    "data-id"
-                  );
-
-                loadVideoById(id);
-
-              }
-            );
-
-          }
-        );
-
-    }
-
-
-    /* =========================================================
-       HTML ESCAPE
-    ========================================================= */
-
-    function escapeHtml(value) {
-
-      return String(value)
-        .replaceAll(
-          "&",
-          "&amp;"
-        )
-        .replaceAll(
-          "<",
-          "&lt;"
-        )
-        .replaceAll(
-          ">",
-          "&gt;"
-        )
-        .replaceAll(
-          '"',
-          "&quot;"
-        )
-        .replaceAll(
-          "'",
-          "&#039;"
-        );
-
-    }
-
-
-    /* =========================================================
-       LOAD VIDEO BY ID
-    ========================================================= */
-
-    async function loadVideoById(id) {
-
-      if (!id) return;
-
-
-      videoTitle.textContent =
-        "Loading...";
-
-
-      videoStatus.textContent =
-        "Loading authorized media...";
-
-
-      try {
-
-        const response =
-          await fetch(
-            API_BASE +
-            "/api/video?id=" +
-            encodeURIComponent(id)
-          );
-
-
-        const data =
-          await response.json();
-
-
-        if (
-          !response.ok ||
-          !data.ok
-        ) {
-
-          throw new Error(
-            data.error ||
-            "Video unavailable"
-          );
-
-        }
-
-
-        videoTitle.textContent =
-          data.title ||
-          "BoJhX Video";
-
-
-        player.src =
-          data.url;
-
-
-        player.load();
-
-
-        videoStatus.textContent =
-          "READY • Authorized stream";
-
-
-        saveHistory({
-
-          id: id,
-
-          title:
-            data.title ||
-            "BoJhX Video",
-
-          time:
-            Date.now()
-
-        });
-
-
-      } catch (error) {
-
-        videoTitle.textContent =
-          "Video unavailable";
-
-
-        videoStatus.textContent =
-          error.message ||
-          "Unable to load video.";
-
-
-        console.error(
-          "[BoJhX] Video error:",
-          error
-        );
-
-      }
-
-    }
-
-
-    /* =========================================================
-       START PARAMETER
-    ========================================================= */
-
-    function getStartParam() {
-
-      if (
-        tg &&
-        tg.initDataUnsafe &&
-             tg.initDataUnsafe.start_param
-    ) {
-
-      return (
-        tg.initDataUnsafe.start_param
-      );
-
-    }
-
+    /*
+     * Telegram Mini App deep-link:
+     *
+     * ?tgWebAppStartParam=v_123
+     *
+     * Automatically open that video.
+     */
 
     const params =
       new URLSearchParams(
@@ -1490,282 +1493,28 @@
       );
 
 
-    return (
-      params.get("startapp") ||
-      params.get("start") ||
-      ""
-    );
-
-  }
-
-
-  /* =========================================================
-     AUTO LOAD VIDEO
-  ========================================================= */
-
-  async function autoLoadVideo() {
-
-    const id =
-      getStartParam();
-
-
-    if (!id) {
-
-      return;
-
-    }
-
-
-    if (
-      !/^v_[A-Za-z0-9_-]+$/.test(id)
-    ) {
-
-      console.warn(
-        "[BoJhX] Invalid video start parameter:",
-        id
+    const startApp =
+      params.get(
+        "tgWebAppStartParam"
       );
 
-      return;
 
-    }
+    if(startApp){
 
-
-    await loadVideoById(id);
-
-  }
-
-
-  /* =========================================================
-     DIRECT AUTHORIZED VIDEO URL
-  ========================================================= */
-
-  function playDirectUrl() {
-
-    const url =
-      videoUrl.value.trim();
-
-
-    if (!url) {
-
-      videoStatus.textContent =
-        "Please enter an authorized video URL.";
-
-      return;
-
-    }
-
-
-    try {
-
-      const parsed =
-        new URL(url);
-
-
-      if (
-        parsed.protocol !==
-        "https:"
-      ) {
-
-        throw new Error(
-          "Only HTTPS URLs are allowed."
-        );
-
-      }
-
-    } catch (error) {
-
-      videoStatus.textContent =
-        "Invalid HTTPS video URL.";
-
-      return;
-
-    }
-
-
-    videoTitle.textContent =
-      "Direct Media";
-
-
-    videoStatus.textContent =
-      "Loading authorized media...";
-
-
-    player.src =
-      url;
-
-
-    player.load();
-
-
-    player
-      .play()
-      .catch(
-        function () {}
+      await loadVideoById(
+   startApp
       );
 
-  }
-
-
-  /* =========================================================
-     PLAY BUTTON
-  ========================================================= */
-
-  playBtn.addEventListener(
-    "click",
-    function () {
-
-      playDirectUrl();
-
     }
-  );
-
-
-  videoUrl.addEventListener(
-    "keydown",
-    function (event) {
-
-      if (
-        event.key ===
-        "Enter"
-      ) {
-
-        playDirectUrl();
-
-      }
-
-    }
-  );
-
-
-  /* =========================================================
-     VIDEO EVENTS
-  ========================================================= */
-
-  player.addEventListener(
-    "loadstart",
-    function () {
-
-      videoStatus.textContent =
-        "Connecting...";
-
-    }
-  );
-
-
-  player.addEventListener(
-    "loadedmetadata",
-    function () {
-
-      videoStatus.textContent =
-        "MEDIA DETECTED";
-
-    }
-  );
-
-
-  player.addEventListener(
-    "canplay",
-    function () {
-
-      videoStatus.textContent =
-        "READY • Stream available";
-
-    }
-  );
-
-
-  player.addEventListener(
-    "playing",
-    function () {
-
-      videoStatus.textContent =
-        "PLAYING • NEXUS STREAM";
-
-    }
-  );
-
-
-  player.addEventListener(
-    "waiting",
-    function () {
-
-      videoStatus.textContent =
-        "BUFFERING...";
-
-    }
-  );
-
-
-  player.addEventListener(
-    "error",
-    function () {
-
-      videoStatus.textContent =
-        "Playback error.";
-
-    }
-  );
-
-
-  player.addEventListener(
-    "ended",
-    function () {
-
-      videoStatus.textContent =
-        "PLAYBACK COMPLETE";
-
-    }
-  );
-
-
-  /* =========================================================
-     START APPLICATION
-  ========================================================= */
-
-  async function startApp() {
-
-    console.log(
-      "[BoJhX] Application starting..."
-    );
-
-
-    renderHistory();
-
-
-    try {
-
-      initializeTelegram();
-
-    } catch (error) {
-
-      console.error(
-        "[BoJhX] Telegram initialization error:",
-        error
-      );
-
-      return;
-
-    }
-
-
-    await authenticateUser();
-
-
-    await autoLoadVideo();
-
-
-    console.log(
-      "[BoJhX] Application initialized."
-    );
 
   }
 
+}
 
-  /* =========================================================
-     BOOT
-  ========================================================= */
 
-  startApp();
+/* START */
+
+start();
 
 </script>
 
