@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -58,8 +59,8 @@ video{display:block;width:100%;max-height:430px;background:#000}
   <div class="brand">BoJhX<span>/</span>NEXUS</div>
   <div class="online">ONLINE</div>
 </div>
-<div class="hero">
 
+<div class="hero">
 <div id="homePage">
   <div class="label">PRIVATE MEDIA SPACE</div>
   <h1>NEXUS<br>PLAYER</h1>
@@ -81,13 +82,19 @@ video{display:block;width:100%;max-height:430px;background:#000}
     <div class="section-title">EXPLORE CATEGORIES</div>
     <div class="category-grid" id="categoryGrid">
       <button class="category-card" data-category="movies">
-        <div class="category-icon">🎬</div><div class="category-name">Movies</div><div class="category-sub">EXPLORE VIDEOS →</div>
+        <div class="category-icon">🎬</div>
+        <div class="category-name">Movies</div>
+        <div class="category-sub">EXPLORE VIDEOS →</div>
       </button>
       <button class="category-card" data-category="latent">
-        <div class="category-icon">🎙️</div><div class="category-name">India's Got Latent</div><div class="category-sub">EXPLORE VIDEOS →</div>
+        <div class="category-icon">🎙️</div>
+        <div class="category-name">India's Got Latent</div>
+        <div class="category-sub">EXPLORE VIDEOS →</div>
       </button>
-      <button class="category-card" data-category="other">
-        <div class="category-icon">📁</div><div class="category-name">Other</div><div class="category-sub">EXPLORE VIDEOS →</div>
+      <button class="category-card" data-category="adult">
+        <div class="category-icon">🔞</div>
+        <div class="category-name">Adult</div>
+        <div class="category-sub">EXPLORE VIDEOS →</div>
       </button>
     </div>
   </div>
@@ -131,333 +138,441 @@ video{display:block;width:100%;max-height:430px;background:#000}
   </div>
   <div class="section">
     <div class="library-box">
-      <div style="padding:10px"><input id="categorySearch" class="search" placeholder="🔎 Search videos..." autocomplete="off"></div>
+      <div style="padding:10px">
+        <input id="categorySearch" class="search" placeholder="🔎 Search videos..." autocomplete="off">
+      </div>
       <div id="categoryVideos" class="library"><div class="loading">Loading videos...</div></div>
     </div>
   </div>
 </div>
-
 </div>
+
 <div class="footer">BOJHX PLAYER • NEXUS SYSTEM</div>
 </div>
 
 <script>
 "use strict";
 
-const API="https://bojhx-bot.alexa215225.workers.dev";
-const tg=window.Telegram?.WebApp||null;
-const $=id=>document.getElementById(id);
+const API = "https://bojhx-bot.alexa215225.workers.dev";
+const tg = window.Telegram?.WebApp || null;
+const $ = id => document.getElementById(id);
 
-const home=$("homePage"),catPage=$("categoryPage"),grid=$("categoryGrid"),back=$("backBtn");
-const catTitle=$("categoryTitle"),catCount=$("categoryCount"),search=$("categorySearch"),list=$("categoryVideos");
-const status=$("identityStatus"),name=$("identityName"),plan=$("identityPlan"),stage=$("identityStage"),completed=$("identityCompleted"),diag=$("diagnostic");
-const player=$("videoPlayer"),title=$("videoTitle"),vstatus=$("videoStatus"),urlInput=$("videoUrl");
+const home = $("homePage");
+const catPage = $("categoryPage");
+const grid = $("categoryGrid");
+const back = $("backBtn");
+const catTitle = $("categoryTitle");
+const catCount = $("categoryCount");
+const search = $("categorySearch");
+const list = $("categoryVideos");
 
-let user=null,owner=false,categoryNow="",videosNow=[],activeId=null,startedId=null,lastProgress=0,progressBusy=false;
+const statusEl = $("identityStatus");
+const nameEl = $("identityName");
+const planEl = $("identityPlan");
+const stageEl = $("identityStage");
+const completedEl = $("identityCompleted");
+const diag = $("diagnostic");
 
-function esc(v){
-  return String(v??"")
-    .replaceAll("&","&amp;")
-    .replaceAll("<","&lt;")
-    .replaceAll(">","&gt;")
-    .replaceAll('"',"&quot;")
-    .replaceAll("'","&#039;");
+const player = $("videoPlayer");
+const titleEl = $("videoTitle");
+const vstatus = $("videoStatus");
+const urlInput = $("videoUrl");
+
+let user = null;
+let owner = false;
+let categoryNow = "";
+let videosNow = [];
+let activeId = null;
+let startedId = null;
+let lastProgress = 0;
+let progressBusy = false;
+
+const names = {
+  movies: "Movies",
+  latent: "India's Got Latent",
+  adult: "Adult"
+};
+
+function esc(v) {
+  return String(v ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 }
 
-function message(t,ok=false){
-  diag.textContent=t;
-  diag.style.display="block";
-  diag.style.borderColor=ok?"#1b6047":"#5b292f";
-  diag.style.background=ok?"#061a12":"#1a090c";
-  diag.style.color=ok?"#62ffb7":"#ff929a";
+function message(t, ok = false) {
+  diag.textContent = t;
+  diag.style.display = "block";
+  diag.style.borderColor = ok ? "#1b6047" : "#5b292f";
+  diag.style.background = ok ? "#061a12" : "#1a090c";
+  diag.style.color = ok ? "#62ffb7" : "#ff929a";
 }
 
-function hideMessage(){diag.textContent="";diag.style.display="none";}
-
-function authStatus(t,c="value"){
-  status.textContent=t;
-  status.className=c;
+function hideMessage() {
+  diag.textContent = "";
+  diag.style.display = "none";
 }
 
-function renderUser(){
-  if(!user)return;
-  name.textContent=user.first_name||user.username||"Telegram User";
-  plan.textContent=user.premium?"PREMIUM":"FREE";
-  plan.className=user.premium?"value success":"value";
-  stage.textContent=`${Math.min(5,Number(user.stage)||0)} / 5`;
-  completed.textContent=String(Number(user.completed_count)||0);
+function authStatus(t, c = "value") {
+  statusEl.textContent = t;
+  statusEl.className = c;
 }
 
-function initData(){return tg?.initData||"";}
+function renderUser() {
+  if (!user) return;
 
-async function api(path,opts={}){
-  const headers=new Headers(opts.headers||{});
-  if(initData())headers.set("Authorization","Bearer "+initData());
-  if(opts.body&&!headers.has("Content-Type"))headers.set("Content-Type","application/json");
-
-  const r=await fetch(API+path,{...opts,headers});
-  let d={};
-  try{d=await r.json();}catch{}
-
-  if(!r.ok||d.ok===false)throw Error(d.error||`Request failed (${r.status})`);
-  return d;
+  nameEl.textContent = user.first_name || user.username || "Telegram User";
+  planEl.textContent = user.premium ? "PREMIUM" : "FREE";
+  planEl.className = user.premium ? "value success" : "value";
+  stageEl.textContent = `${Math.min(5, Number(user.stage) || 0)} / 5`;
+  completedEl.textContent = String(Number(user.completed_count) || 0);
 }
 
-async function authenticate(){
-  if(!tg){
-    authStatus("OPEN IN TELEGRAM","value danger");
+function initData() {
+  return tg?.initData || "";
+}
+
+async function api(path, opts = {}) {
+  const headers = new Headers(opts.headers || {});
+
+  if (initData()) {
+    headers.set("Authorization", "Bearer " + initData());
+  }
+
+  if (opts.body && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  const response = await fetch(API + path, { ...opts, headers });
+  let data = {};
+
+  try {
+    data = await response.json();
+  } catch {}
+
+  if (!response.ok || data.ok === false) {
+    throw Error(data.error || `Request failed (${response.status})`);
+  }
+
+  return data;
+}
+
+async function authenticate() {
+  if (!tg) {
+    authStatus("OPEN IN TELEGRAM", "value danger");
     message("Open BoJhX Player from Telegram to authenticate.");
     return false;
   }
 
-  if(!initData()){
-    authStatus("NO AUTH DATA","value danger");
+  if (!initData()) {
+    authStatus("NO AUTH DATA", "value danger");
     message("Telegram did not provide initData. Reopen the Mini App from the bot.");
     return false;
   }
 
-  authStatus("VERIFYING...","value warning");
+  authStatus("VERIFYING...", "value warning");
   hideMessage();
 
-  try{
-    const d=await api("/api/me");
-    user=d.user;
-    owner=d.is_owner===true;
-    if(!user)throw Error("Worker did not return user data");
+  try {
+    const data = await api("/api/me");
+    user = data.user;
 
-    authStatus("VERIFIED","value success");
+    // Worker must return is_owner after validating Telegram initData.
+    owner = data.is_owner === true;
+
+    if (!user) throw Error("Worker did not return user data");
+
+    authStatus("VERIFIED", "value success");
     renderUser();
-    message("Telegram identity verified successfully.",true);
+
+    if (owner) {
+      message("Owner account verified. Delete controls enabled.", true);
+    } else {
+      message("Telegram identity verified successfully.", true);
+    }
+
     return true;
-  }catch(e){
-    authStatus("FAILED","value danger");
-    name.textContent="Authentication failed";
-    plan.textContent="LOCKED";
-    message(e.message);
+  } catch (error) {
+    authStatus("FAILED", "value danger");
+    nameEl.textContent = "Authentication failed";
+    planEl.textContent = "LOCKED";
+    message(error.message);
     return false;
   }
 }
 
-const names={
-  movies:"Movies",
-  latent:"India's Got Latent",
-  other:"Other"
-};
-
-function homeView(){
-  catPage.hidden=true;
-  home.hidden=false;
-  categoryNow="";
-  window.scrollTo({top:0,behavior:"smooth"});
+function homeView() {
+  catPage.hidden = true;
+  home.hidden = false;
+  categoryNow = "";
+  window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-async function openCategory(c){
-  categoryNow=c;
-  catTitle.textContent=names[c]||"Category";
-  catCount.textContent="Loading videos...";
-  catPage.hidden=false;
-  home.hidden=true;
-  search.value="";
-  list.innerHTML='<div class="loading">Loading videos...</div>';
-  window.scrollTo({top:0,behavior:"smooth"});
-
-  try{
-    const d=await api("/api/videos?category="+encodeURIComponent(c));
-    videosNow=Array.isArray(d.videos)?d.videos:[];
-    catCount.textContent=`${videosNow.length} video${videosNow.length===1?"":"s"}`;
-    renderVideos(videosNow);
-  }catch(e){
-    videosNow=[];
-    catCount.textContent="Unable to load";
-    list.innerHTML=`<div class="empty">${esc(e.message)}</div>`;
-  }
-}
-
-function renderVideos(vs){
-  if(!vs.length){
-    list.innerHTML='<div class="empty">No videos in this category yet.</div>';
+async function openCategory(category) {
+  if (!names[category]) {
+    message("Unknown category.");
     return;
   }
 
-  list.innerHTML=vs.map(v=>`
-    <div class="video-card" data-id="${esc(v.id)}">
+  categoryNow = category;
+  catTitle.textContent = names[category];
+  catCount.textContent = "Loading videos...";
+  catPage.hidden = false;
+  home.hidden = true;
+  search.value = "";
+  list.innerHTML = '<div class="loading">Loading videos...</div>';
+
+  window.scrollTo({ top: 0, behavior: "smooth" });
+
+  try {
+    const data = await api("/api/videos?category=" + encodeURIComponent(category));
+    videosNow = Array.isArray(data.videos) ? data.videos : [];
+
+    catCount.textContent =
+      `${videosNow.length} video${videosNow.length === 1 ? "" : "s"}`;
+
+    renderVideos(videosNow);
+  } catch (error) {
+    videosNow = [];
+    catCount.textContent = "Unable to load";
+    list.innerHTML = `<div class="empty">${esc(error.message)}</div>`;
+  }
+}
+
+function renderVideos(videos) {
+  if (!videos.length) {
+    list.innerHTML = '<div class="empty">No videos in this category yet.</div>';
+    return;
+  }
+
+  list.innerHTML = videos.map(video => `
+    <div class="video-card" data-id="${esc(video.id)}">
       <div class="video-icon">▶</div>
-      <div class="video-card-title">${esc(v.title||"BoJhX Video")}</div>
-      <div class="video-card-meta">${v.created_at?esc(new Date(v.created_at).toLocaleDateString()):"Authorized media"}</div>
-      <button class="play-small watch">▶ WATCH</button>
-      ${owner?'<button class="delete-small delete">DELETE VIDEO</button>':""}
+      <div class="video-card-title">${esc(video.title || "BoJhX Video")}</div>
+      <div class="video-card-meta">
+        ${video.created_at ? esc(new Date(video.created_at).toLocaleDateString()) : "Authorized media"}
+      </div>
+      <button class="play-small watch" type="button">▶ WATCH</button>
+      ${owner ? '<button class="delete-small delete" type="button">DELETE VIDEO</button>' : ""}
     </div>
   `).join("");
 
-  list.querySelectorAll(".watch").forEach(b=>{
-    b.addEventListener("click",e=>{
-      e.stopPropagation();
-      loadVideo(b.closest(".video-card").dataset.id);
+  list.querySelectorAll(".watch").forEach(button => {
+    button.addEventListener("click", () => {
+      const card = button.closest(".video-card");
+      if (card) loadVideo(card.dataset.id);
     });
   });
 
-  list.querySelectorAll(".delete").forEach(b=>{
-    b.addEventListener("click",e=>{
-      e.stopPropagation();
-      deleteVideo(b.closest(".video-card").dataset.id);
+  list.querySelectorAll(".delete").forEach(button => {
+    button.addEventListener("click", () => {
+      const card = button.closest(".video-card");
+      if (card) deleteVideo(card.dataset.id);
     });
   });
 }
 
-search.addEventListener("input",()=>{
-  const q=search.value.trim().toLowerCase();
-  renderVideos(videosNow.filter(v=>
-    String(v.title||"").toLowerCase().includes(q)||
-    String(v.file_name||"").toLowerCase().includes(q)
+search.addEventListener("input", () => {
+  const query = search.value.trim().toLowerCase();
+
+  renderVideos(videosNow.filter(video =>
+    String(video.title || "").toLowerCase().includes(query) ||
+    String(video.file_name || "").toLowerCase().includes(query)
   ));
 });
 
-grid.querySelectorAll("button").forEach(b=>{
-  b.addEventListener("click",()=>openCategory(b.dataset.category));
+grid.querySelectorAll("button").forEach(button => {
+  button.addEventListener("click", () => openCategory(button.dataset.category));
 });
 
-back.addEventListener("click",homeView);
+back.addEventListener("click", homeView);
 
-async function loadVideo(id){
-  if(!id)return;
+async function loadVideo(id) {
+  if (!id) return;
 
-  vstatus.textContent="Authorizing stream...";
-  title.textContent="Loading...";
+  vstatus.textContent = "Authorizing stream...";
+  titleEl.textContent = "Loading...";
 
-  try{
-    const d=await api("/api/video?id="+encodeURIComponent(id));
-    if(!d.url)throw Error("Worker did not return a stream URL");
+  try {
+    const data = await api("/api/video?id=" + encodeURIComponent(id));
+
+    if (!data.url) throw Error("Worker did not return a stream URL");
 
     player.pause();
     player.removeAttribute("src");
     player.load();
-    player.src=d.url;
+
+    player.src = data.url;
     player.load();
 
-    activeId=d.id||id;
-    startedId=null;
-    lastProgress=0;
-    title.textContent=d.title||"BoJhX Video";
-    vstatus.textContent="Stream ready. Press play.";
+    activeId = data.id || id;
+    startedId = null;
+    lastProgress = 0;
+
+    titleEl.textContent = data.title || "BoJhX Video";
+    vstatus.textContent = "Stream ready. Press play.";
+
     homeView();
-  }catch(e){
-    vstatus.textContent="Playback setup failed: "+e.message;
+  } catch (error) {
+    vstatus.textContent = "Playback setup failed: " + error.message;
   }
 }
 
-async function report(event){
-  if(!activeId||!initData())return;
+async function report(event) {
+  if (!activeId || !initData()) return;
 
-  const b={id:activeId,event};
+  const body = { id: activeId, event };
 
-  if(event==="progress"){
-    if(!Number.isFinite(player.duration)||player.duration<=0)return;
-    b.watchedSeconds=player.currentTime;
-    b.duration=player.duration;
+  if (event === "progress") {
+    if (!Number.isFinite(player.duration) || player.duration <= 0) return;
+
+    body.watchedSeconds = player.currentTime;
+    body.duration = player.duration;
   }
 
-  try{
-    const d=await api("/api/progress",{
-      method:"POST",
-      body:JSON.stringify(b)
+  try {
+    const data = await api("/api/progress", {
+      method: "POST",
+      body: JSON.stringify(body)
     });
 
-    if(typeof d.stage==="number"&&user){
-      user.stage=d.stage;
-      user.completed_count=d.completed||user.completed_count||0;
+    if (typeof data.stage === "number" && user) {
+      user.stage = data.stage;
+      user.completed_count = data.completed ?? user.completed_count ?? 0;
       renderUser();
     }
-  }catch(e){
-    console.warn("Progress update failed",e.message);
+  } catch (error) {
+    console.warn("Progress update failed:", error.message);
   }
 }
 
-player.addEventListener("playing",()=>{
-  vstatus.textContent="▶ Playing";
-  if(activeId&&startedId!==activeId){
-    startedId=activeId;
+player.addEventListener("playing", () => {
+  vstatus.textContent = "▶ Playing";
+
+  if (activeId && startedId !== activeId) {
+    startedId = activeId;
     report("started");
   }
 });
 
-player.addEventListener("timeupdate",()=>{
-  if(!activeId||!player.duration)return;
-  const now=Date.now();
+player.addEventListener("timeupdate", () => {
+  if (!activeId || !player.duration) return;
 
-  if(now-lastProgress<10000&&player.currentTime/player.duration<.8)return;
+  const now = Date.now();
+  if (now - lastProgress < 10000 && player.currentTime / player.duration < 0.8) return;
 
-  if(!progressBusy){
-    progressBusy=true;
-    lastProgress=now;
-    report("progress").finally(()=>progressBusy=false);
+  if (!progressBusy) {
+    progressBusy = true;
+    lastProgress = now;
+    report("progress").finally(() => {
+      progressBusy = false;
+    });
   }
 });
 
-player.addEventListener("loadstart",()=>vstatus.textContent="Loading stream...");
-player.addEventListener("canplay",()=>vstatus.textContent="Ready to play.");
-player.addEventListener("waiting",()=>vstatus.textContent="Buffering...");
-player.addEventListener("pause",()=>{
-  if(!player.ended&&activeId)report("progress");
-});
-player.addEventListener("ended",()=>{
-  report("progress").finally(()=>vstatus.textContent="Playback finished.");
-});
-player.addEventListener("error",()=>{
-  vstatus.textContent=`Playback error${player.error?` (media error ${player.error.code})`:""}. Check Worker streaming and Telegram file.`;
+player.addEventListener("loadstart", () => {
+  vstatus.textContent = "Loading stream...";
 });
 
-$("playBtn").addEventListener("click",()=>{
-  const u=urlInput.value.trim();
+player.addEventListener("canplay", () => {
+  vstatus.textContent = "Ready to play.";
+});
 
-  try{
-    const p=new URL(u);
-    if(!["http:","https:"].includes(p.protocol))throw Error();
-  }catch{
-    vstatus.textContent="Enter a valid HTTP(S) video URL.";
+player.addEventListener("waiting", () => {
+  vstatus.textContent = "Buffering...";
+});
+
+player.addEventListener("pause", () => {
+  if (!player.ended && activeId) report("progress");
+});
+
+player.addEventListener("ended", () => {
+  report("progress").finally(() => {
+    vstatus.textContent = "Playback finished.";
+  });
+});
+
+player.addEventListener("error", () => {
+  vstatus.textContent =
+    `Playback error${player.error ? ` (media error ${player.error.code})` : ""}. Check Worker streaming and Telegram file.`;
+});
+
+$("playBtn").addEventListener("click", () => {
+  const value = urlInput.value.trim();
+
+  try {
+    const parsed = new URL(value);
+    if (!["http:", "https:"].includes(parsed.protocol)) throw Error();
+  } catch {
+    vstatus.textContent = "Enter a valid HTTP(S) video URL.";
     return;
   }
 
   player.pause();
   player.removeAttribute("src");
-  player.src=u;
+  player.src = value;
   player.load();
-  activeId=null;
-  startedId=null;
-  title.textContent="Direct Authorized Video";
-  vstatus.textContent="Ready to play.";
+
+  activeId = null;
+  startedId = null;
+  titleEl.textContent = "Direct Authorized Video";
+  vstatus.textContent = "Ready to play.";
 });
 
-async function deleteVideo(id){
-  if(!owner)return;
+async function deleteVideo(id) {
+  if (!owner) {
+    message("Delete permission denied. Owner account required.");
+    return;
+  }
 
-  if(!confirm("Delete this video from the library? The Worker will also try to delete the channel post."))return;
+  const confirmed = confirm(
+    "Remove this video from the BoJhX Player library? The original Telegram channel post will remain."
+  );
 
-  try{
-    const d=await api("/api/delete-video",{
-      method:"POST",
-      body:JSON.stringify({id})
+  if (!confirmed) return;
+
+  try {
+    await api("/api/delete-video", {
+      method: "POST",
+      body: JSON.stringify({ id })
     });
 
-    message(`Video removed. Telegram post deleted: ${d.telegram_deleted?"yes":"no"}`,true);
-    await openCategory(categoryNow||"movies");
-  }catch(e){
-    message("Delete failed: "+e.message);
+    message("Video removed from the player library.", true);
+
+    const categoryToRefresh = categoryNow || "movies";
+    await openCategory(categoryToRefresh);
+  } catch (error) {
+    message("Delete failed: " + error.message);
   }
 }
 
-function startParam(){
-  if(!tg)return"";
-  if(tg.initDataUnsafe?.start_param)return String(tg.initDataUnsafe.start_param);
-  return new URLSearchParams(location.search).get("tgWebAppStartParam")||"";
+function startParam() {
+  if (!tg) return "";
+
+  if (tg.initDataUnsafe?.start_param) {
+    return String(tg.initDataUnsafe.start_param);
+  }
+
+  return new URLSearchParams(location.search).get("tgWebAppStartParam") || "";
 }
 
-async function start(){
-  try{tg?.ready();tg?.expand();}catch{}
-  if(!await authenticate())return;
+async function start() {
+  try {
+    tg?.ready();
+    tg?.expand();
+  } catch {}
 
-  const p=startParam();
-  if(p.startsWith("v_"))await loadVideo(p);
-  else if(p.startsWith("category_"))await openCategory(p.slice(9));
+  if (!await authenticate()) return;
+
+  const param = startParam();
+
+  if (param.startsWith("v_")) {
+    await loadVideo(param);
+  } else if (param.startsWith("category_")) {
+    await openCategory(param.slice("category_".length));
+  }
 }
 
 start();
