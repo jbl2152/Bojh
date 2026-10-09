@@ -5,11 +5,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#07100e">
-<title>BoJhX Player</title>
+<title>BoJhX Player — NEXUS</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{min-height:100vh;background:radial-gradient(circle at top,#10221e 0%,#07100e 45%,#030706 100%);color:#eafff8;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;padding:12px}
+body{min-height:100vh;background:radial-gradient(circle at top,#10221e,#07100e 45%,#030706);color:#eafff8;font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;padding:12px}
 button,input{font:inherit}button{cursor:pointer}.app{max-width:760px;margin:auto}
 .topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .brand{font-size:21px;font-weight:900;letter-spacing:2px}.brand span{color:#48ffb0}
@@ -17,19 +17,23 @@ button,input{font:inherit}button{cursor:pointer}.app{max-width:760px;margin:auto
 .hero{border:1px solid #173d32;border-radius:24px;padding:17px;background:rgba(5,15,12,.96);box-shadow:0 20px 70px #0007}
 .label,.section-title{color:#79a99b;font-size:10px;font-weight:900;letter-spacing:2px}
 h1{font-size:40px;line-height:.95;letter-spacing:-2px;margin:7px 0 10px}
-.subtitle{color:#88a99f;font-size:13px;margin-bottom:18px}.section{margin-top:20px}.section-title{margin-bottom:9px}
-.identity,.player,.library-box{border:1px solid #174237;background:#030d0a;border-radius:18px;overflow:hidden}.identity{padding:12px}
-.row{display:flex;justify-content:space-between;gap:10px;padding:6px 0}.key{color:#6e9389;font-size:11px}.value{font-size:11px;font-weight:900;text-align:right}
+.subtitle{color:#88a99f;font-size:13px;margin-bottom:18px}
+.section{margin-top:20px}.section-title{margin-bottom:9px}
+.identity,.player,.library-box{border:1px solid #174237;background:#030d0a;border-radius:18px;overflow:hidden}
+.identity{padding:12px}.row{display:flex;justify-content:space-between;gap:10px;padding:6px 0}
+.key{color:#6e9389;font-size:11px}.value{font-size:11px;font-weight:900;text-align:right}
 .success{color:#4dffad}.danger{color:#ff6976}.warning{color:#ffc866}
-.diagnostic{display:none;margin-top:10px;border:1px solid #5b292f;background:#1a090c;border-radius:14px;padding:11px;color:#ff929a;font-size:10px;white-space:pre-wrap;word-break:break-word}
+.diagnostic{display:none;margin-top:10px;border:1px solid #5b292f;background:#1a090c;border-radius:14px;padding:11px;color:#ff929a;font-size:11px;white-space:pre-wrap;overflow-wrap:anywhere}
 .category-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .category-card{min-height:135px;border:1px solid #194538;border-radius:18px;padding:15px;background:linear-gradient(145deg,#0b211a,#06100d);text-align:left;color:#eafff8}
 .category-card:active{transform:scale(.98);border-color:#42e9a0}
-.category-icon{font-size:30px;margin-bottom:18px}.category-name{font-size:15px;font-weight:900;line-height:1.2}.category-sub{margin-top:7px;color:#66877f;font-size:9px}
-.category-page{display:block}#homePage[hidden],.category-page[hidden]{display:none!important}
+.category-icon{font-size:30px;margin-bottom:18px}.category-name{font-size:15px;font-weight:900;line-height:1.2}
+.category-sub{margin-top:7px;color:#66877f;font-size:9px}
+.category-page{display:block}
+#homePage[hidden],.category-page[hidden]{display:none!important}
 .category-head{display:flex;align-items:center;gap:10px;margin-bottom:12px}
 .back-btn{width:42px;height:42px;border:1px solid #194538;border-radius:13px;background:#071711;color:#52ffb5;font-size:19px;font-weight:900}
-.category-heading{min-width:0}.category-heading-title{font-size:20px;font-weight:900;overflow:hidden;text-overflow:ellipsis}
+.category-heading{min-width:0}.category-heading-title{font-size:20px;font-weight:900;overflow-wrap:anywhere}
 .category-count{margin-top:3px;color:#66877f;font-size:10px}
 .search,.direct input{width:100%;padding:13px;border-radius:14px;border:1px solid #194538;background:#030d0a;color:#fff;outline:none;font-size:13px}
 .search:focus,.direct input:focus{border-color:#45eaa1}
@@ -38,116 +42,121 @@ h1{font-size:40px;line-height:.95;letter-spacing:-2px;margin:7px 0 10px}
 .video-icon{height:78px;border-radius:11px;background:radial-gradient(circle at 30% 20%,#173f31,#07120e 65%);display:flex;align-items:center;justify-content:center;font-size:25px;margin-bottom:9px;border:1px solid #12352b}
 .video-card-title{font-size:12px;font-weight:900;line-height:1.3;overflow-wrap:anywhere}
 .video-card-meta{font-size:9px;color:#66877f;margin-top:5px}
-.play-small,.delete-small{margin-top:9px;width:100%;padding:9px;border:0;border-radius:10px;background:#42e9a0;color:#03110b;font-size:10px;font-weight:900}
-.delete-small{background:#5b2229;color:#ffe5e7;margin-top:6px}
+.play-small,.delete-small{margin-top:9px;width:100%;padding:10px;border:0;border-radius:10px;background:#42e9a0;color:#03110b;font-size:10px;font-weight:900}
+.delete-small{background:#6b2029;color:#ffe5e7;margin-top:7px;border:1px solid #a63b47}
 .empty,.loading{padding:20px;text-align:center;color:#77948c;font-size:11px;grid-column:1/-1}
 video{display:block;width:100%;max-height:430px;background:#000}
 .player-info{padding:12px;background:#020807;border-top:1px solid #14352c}
-.title{font-size:14px;font-weight:900;overflow-wrap:anywhere}.video-status{color:#6f958b;font-size:10px;margin-top:4px}
+.title{font-size:14px;font-weight:900;overflow-wrap:anywhere}
+.video-status{color:#6f958b;font-size:10px;margin-top:4px}
 .direct{display:flex;flex-direction:column;gap:8px}
 .direct button{padding:13px;border:0;border-radius:14px;background:#42e9a0;color:#03110b;font-weight:900}
 .system{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
-.card{border:1px solid #173b31;background:#06120e;border-radius:14px;padding:13px 5px;text-align:center}
-.card strong{display:block;color:#52f5ad;font-size:12px}.card span{color:#65867e;font-size:8px;letter-spacing:1px}
+.system-card{border:1px solid #173b31;background:#06120e;border-radius:14px;padding:13px 5px;text-align:center}
+.system-card strong{display:block;color:#52f5ad;font-size:12px}
+.system-card span{color:#65867e;font-size:8px;letter-spacing:1px}
 .footer{text-align:center;color:#3d5b54;font-size:9px;letter-spacing:1px;padding:18px 0 6px}
 @media(max-width:430px){.hero{padding:15px}.library{grid-template-columns:1fr 1fr}}
 </style>
 </head>
 <body>
 <div class="app">
-<div class="topbar">
-  <div class="brand">BoJhX<span>/</span>NEXUS</div>
-  <div class="online">ONLINE</div>
-</div>
-
-<div class="hero">
-<div id="homePage">
-  <div class="label">PRIVATE MEDIA SPACE</div>
-  <h1>NEXUS<br>PLAYER</h1>
-  <div class="subtitle">Your media. Your control.</div>
-
-  <div class="section">
-    <div class="section-title">NEXUS IDENTITY</div>
-    <div class="identity">
-      <div class="row"><span class="key">STATUS</span><span id="identityStatus" class="value">STARTING...</span></div>
-      <div class="row"><span class="key">USER</span><span id="identityName" class="value">—</span></div>
-      <div class="row"><span class="key">PLAN</span><span id="identityPlan" class="value warning">LOCKED</span></div>
-      <div class="row"><span class="key">VIEWING STAGE</span><span id="identityStage" class="value">0 / 5</span></div>
-      <div class="row"><span class="key">COMPLETED VIDEOS</span><span id="identityCompleted" class="value">0</span></div>
-    </div>
-    <div id="diagnostic" class="diagnostic"></div>
+  <div class="topbar">
+    <div class="brand">BoJhX<span>/</span>NEXUS</div>
+    <div class="online">ONLINE</div>
   </div>
 
-  <div class="section">
-    <div class="section-title">EXPLORE CATEGORIES</div>
-    <div class="category-grid" id="categoryGrid">
-      <button class="category-card" data-category="movies">
-        <div class="category-icon">🎬</div>
-        <div class="category-name">Movies</div>
-        <div class="category-sub">EXPLORE VIDEOS →</div>
-      </button>
-      <button class="category-card" data-category="latent">
-        <div class="category-icon">🎙️</div>
-        <div class="category-name">India's Got Latent</div>
-        <div class="category-sub">EXPLORE VIDEOS →</div>
-      </button>
-      <button class="category-card" data-category="adult">
-        <div class="category-icon">🔞</div>
-        <div class="category-name">Adult</div>
-        <div class="category-sub">EXPLORE VIDEOS →</div>
-      </button>
-    </div>
-  </div>
+  <div class="hero">
+    <div id="homePage">
+      <div class="label">PRIVATE MEDIA SPACE</div>
+      <h1>NEXUS<br>PLAYER</h1>
+      <div class="subtitle">Your media. Your control.</div>
 
-  <div class="section">
-    <div class="section-title">PLAYER</div>
-    <div class="player">
-      <video id="videoPlayer" controls playsinline preload="metadata"></video>
-      <div class="player-info">
-        <div id="videoTitle" class="title">No video loaded</div>
-        <div id="videoStatus" class="video-status">Select a video from a category.</div>
+      <div class="section">
+        <div class="section-title">NEXUS IDENTITY</div>
+        <div class="identity">
+          <div class="row"><span class="key">STATUS</span><span id="identityStatus" class="value">STARTING...</span></div>
+          <div class="row"><span class="key">USER</span><span id="identityName" class="value">—</span></div>
+          <div class="row"><span class="key">PLAN</span><span id="identityPlan" class="value warning">LOCKED</span></div>
+          <div class="row"><span class="key">VIEWING STAGE</span><span id="identityStage" class="value">0 / 5</span></div>
+          <div class="row"><span class="key">COMPLETED VIDEOS</span><span id="identityCompleted" class="value">0</span></div>
+          <div id="ownerRow" class="row" hidden><span class="key">ACCOUNT ROLE</span><span class="value success">OWNER</span></div>
+        </div>
+        <div id="diagnostic" class="diagnostic" role="status"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">EXPLORE CATEGORIES</div>
+        <div class="category-grid" id="categoryGrid">
+          <button class="category-card" data-category="movies">
+            <div class="category-icon">🎬</div>
+            <div class="category-name">Movies</div>
+            <div class="category-sub">EXPLORE VIDEOS →</div>
+          </button>
+          <button class="category-card" data-category="latent">
+            <div class="category-icon">🎙️</div>
+            <div class="category-name">India's Got Latent</div>
+            <div class="category-sub">EXPLORE VIDEOS →</div>
+          </button>
+          <button class="category-card" data-category="adult">
+            <div class="category-icon">🔞</div>
+            <div class="category-name">Adult</div>
+            <div class="category-sub">EXPLORE VIDEOS →</div>
+          </button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">PLAYER</div>
+        <div class="player">
+          <video id="videoPlayer" controls playsinline preload="metadata"></video>
+          <div class="player-info">
+            <div id="videoTitle" class="title">No video loaded</div>
+            <div id="videoStatus" class="video-status">Select a video from a category.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">AUTHORIZED VIDEO URL</div>
+        <div class="direct">
+          <input id="videoUrl" type="url" placeholder="Paste an authorized direct video URL..." autocomplete="off">
+          <button id="playBtn">▶ PLAY VIDEO</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">NEXUS SYSTEM</div>
+        <div class="system">
+          <div class="system-card"><strong>FAST</strong><span>STREAM</span></div>
+          <div class="system-card"><strong>PRIVATE</strong><span>ACCESS</span></div>
+          <div class="system-card"><strong>HD</strong><span>QUALITY</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="categoryPage" class="category-page" hidden>
+      <div class="category-head">
+        <button id="backBtn" class="back-btn" aria-label="Back">←</button>
+        <div class="category-heading">
+          <div id="categoryTitle" class="category-heading-title">Category</div>
+          <div id="categoryCount" class="category-count">Loading...</div>
+        </div>
+      </div>
+      <div class="section">
+        <div class="library-box">
+          <div style="padding:10px">
+            <input id="categorySearch" class="search" placeholder="🔎 Search videos..." autocomplete="off">
+          </div>
+          <div id="categoryVideos" class="library">
+            <div class="loading">Loading videos...</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="section">
-    <div class="section-title">AUTHORIZED VIDEO URL</div>
-    <div class="direct">
-      <input id="videoUrl" type="url" placeholder="Paste an authorized direct video URL..." autocomplete="off">
-      <button id="playBtn">▶ PLAY VIDEO</button>
-    </div>
-  </div>
-
-  <div class="section">
-    <div class="section-title">NEXUS SYSTEM</div>
-    <div class="system">
-      <div class="card"><strong>FAST</strong><span>STREAM</span></div>
-      <div class="card"><strong>PRIVATE</strong><span>ACCESS</span></div>
-      <div class="card"><strong>HD</strong><span>QUALITY</span></div>
-    </div>
-  </div>
-</div>
-
-<div id="categoryPage" class="category-page" hidden>
-  <div class="category-head">
-    <button id="backBtn" class="back-btn" aria-label="Back">←</button>
-    <div class="category-heading">
-      <div id="categoryTitle" class="category-heading-title">Category</div>
-      <div id="categoryCount" class="category-count">Loading...</div>
-    </div>
-  </div>
-  <div class="section">
-    <div class="library-box">
-      <div style="padding:10px">
-        <input id="categorySearch" class="search" placeholder="🔎 Search videos..." autocomplete="off">
-      </div>
-      <div id="categoryVideos" class="library"><div class="loading">Loading videos...</div></div>
-    </div>
-  </div>
-</div>
-</div>
-
-<div class="footer">BOJHX PLAYER • NEXUS SYSTEM</div>
+  <div class="footer">BOJHX PLAYER • NEXUS SYSTEM</div>
 </div>
 
 <script>
@@ -171,11 +180,12 @@ const nameEl = $("identityName");
 const planEl = $("identityPlan");
 const stageEl = $("identityStage");
 const completedEl = $("identityCompleted");
+const ownerRow = $("ownerRow");
 const diag = $("diagnostic");
 
 const player = $("videoPlayer");
 const titleEl = $("videoTitle");
-const vstatus = $("videoStatus");
+const videoStatus = $("videoStatus");
 const urlInput = $("videoUrl");
 
 let user = null;
@@ -187,14 +197,14 @@ let startedId = null;
 let lastProgress = 0;
 let progressBusy = false;
 
-const names = {
+const categoryNames = {
   movies: "Movies",
   latent: "India's Got Latent",
   adult: "Adult"
 };
 
-function esc(v) {
-  return String(v ?? "")
+function esc(value) {
+  return String(value ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;")
@@ -202,12 +212,12 @@ function esc(v) {
     .replaceAll("'", "&#039;");
 }
 
-function message(t, ok = false) {
-  diag.textContent = t;
+function message(text, success = false) {
+  diag.textContent = text;
   diag.style.display = "block";
-  diag.style.borderColor = ok ? "#1b6047" : "#5b292f";
-  diag.style.background = ok ? "#061a12" : "#1a090c";
-  diag.style.color = ok ? "#62ffb7" : "#ff929a";
+  diag.style.borderColor = success ? "#1b6047" : "#5b292f";
+  diag.style.background = success ? "#061a12" : "#1a090c";
+  diag.style.color = success ? "#62ffb7" : "#ff929a";
 }
 
 function hideMessage() {
@@ -215,39 +225,42 @@ function hideMessage() {
   diag.style.display = "none";
 }
 
-function authStatus(t, c = "value") {
-  statusEl.textContent = t;
-  statusEl.className = c;
+function authStatus(text, className = "value") {
+  statusEl.textContent = text;
+  statusEl.className = className;
 }
 
 function renderUser() {
   if (!user) return;
-
   nameEl.textContent = user.first_name || user.username || "Telegram User";
   planEl.textContent = user.premium ? "PREMIUM" : "FREE";
   planEl.className = user.premium ? "value success" : "value";
   stageEl.textContent = `${Math.min(5, Number(user.stage) || 0)} / 5`;
   completedEl.textContent = String(Number(user.completed_count) || 0);
+  ownerRow.hidden = !owner;
 }
 
 function initData() {
   return tg?.initData || "";
 }
 
-async function api(path, opts = {}) {
-  const headers = new Headers(opts.headers || {});
+async function api(path, options = {}) {
+  const headers = new Headers(options.headers || {});
 
   if (initData()) {
     headers.set("Authorization", "Bearer " + initData());
   }
 
-  if (opts.body && !headers.has("Content-Type")) {
+  if (options.body && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
 
-  const response = await fetch(API + path, { ...opts, headers });
-  let data = {};
+  const response = await fetch(API + path, {
+    ...options,
+    headers
+  });
 
+  let data = {};
   try {
     data = await response.json();
   } catch {}
@@ -277,9 +290,8 @@ async function authenticate() {
 
   try {
     const data = await api("/api/me");
-    user = data.user;
 
-    // Worker must return is_owner after validating Telegram initData.
+    user = data.user;
     owner = data.is_owner === true;
 
     if (!user) throw Error("Worker did not return user data");
@@ -287,17 +299,20 @@ async function authenticate() {
     authStatus("VERIFIED", "value success");
     renderUser();
 
-    if (owner) {
-      message("Owner account verified. Delete controls enabled.", true);
-    } else {
-      message("Telegram identity verified successfully.", true);
-    }
+    message(
+      owner
+        ? "Telegram verified. Owner controls enabled."
+        : "Telegram identity verified successfully.",
+      true
+    );
 
     return true;
   } catch (error) {
     authStatus("FAILED", "value danger");
     nameEl.textContent = "Authentication failed";
     planEl.textContent = "LOCKED";
+    owner = false;
+    ownerRow.hidden = true;
     message(error.message);
     return false;
   }
@@ -311,13 +326,13 @@ function homeView() {
 }
 
 async function openCategory(category) {
-  if (!names[category]) {
+  if (!categoryNames[category]) {
     message("Unknown category.");
     return;
   }
 
   categoryNow = category;
-  catTitle.textContent = names[category];
+  catTitle.textContent = categoryNames[category];
   catCount.textContent = "Loading videos...";
   catPage.hidden = false;
   home.hidden = true;
@@ -327,9 +342,11 @@ async function openCategory(category) {
   window.scrollTo({ top: 0, behavior: "smooth" });
 
   try {
-    const data = await api("/api/videos?category=" + encodeURIComponent(category));
-    videosNow = Array.isArray(data.videos) ? data.videos : [];
+    const data = await api(
+      "/api/videos?category=" + encodeURIComponent(category)
+    );
 
+    videosNow = Array.isArray(data.videos) ? data.videos : [];
     catCount.textContent =
       `${videosNow.length} video${videosNow.length === 1 ? "" : "s"}`;
 
@@ -352,10 +369,14 @@ function renderVideos(videos) {
       <div class="video-icon">▶</div>
       <div class="video-card-title">${esc(video.title || "BoJhX Video")}</div>
       <div class="video-card-meta">
-        ${video.created_at ? esc(new Date(video.created_at).toLocaleDateString()) : "Authorized media"}
+        ${video.created_at
+          ? esc(new Date(video.created_at).toLocaleDateString())
+          : "Authorized media"}
       </div>
       <button class="play-small watch" type="button">▶ WATCH</button>
-      ${owner ? '<button class="delete-small delete" type="button">DELETE VIDEO</button>' : ""}
+      ${owner
+        ? '<button class="delete-small delete" type="button">🗑 DELETE VIDEO</button>'
+        : ""}
     </div>
   `).join("");
 
@@ -369,7 +390,7 @@ function renderVideos(videos) {
   list.querySelectorAll(".delete").forEach(button => {
     button.addEventListener("click", () => {
       const card = button.closest(".video-card");
-      if (card) deleteVideo(card.dataset.id);
+      if (card) deleteVideo(card.dataset.id, button);
     });
   });
 }
@@ -383,8 +404,10 @@ search.addEventListener("input", () => {
   ));
 });
 
-grid.querySelectorAll("button").forEach(button => {
-  button.addEventListener("click", () => openCategory(button.dataset.category));
+grid.querySelectorAll("[data-category]").forEach(button => {
+  button.addEventListener("click", () => {
+    openCategory(button.dataset.category);
+  });
 });
 
 back.addEventListener("click", homeView);
@@ -392,7 +415,7 @@ back.addEventListener("click", homeView);
 async function loadVideo(id) {
   if (!id) return;
 
-  vstatus.textContent = "Authorizing stream...";
+  videoStatus.textContent = "Authorizing stream...";
   titleEl.textContent = "Loading...";
 
   try {
@@ -403,7 +426,6 @@ async function loadVideo(id) {
     player.pause();
     player.removeAttribute("src");
     player.load();
-
     player.src = data.url;
     player.load();
 
@@ -412,11 +434,11 @@ async function loadVideo(id) {
     lastProgress = 0;
 
     titleEl.textContent = data.title || "BoJhX Video";
-    vstatus.textContent = "Stream ready. Press play.";
+    videoStatus.textContent = "Stream ready. Press play.";
 
     homeView();
   } catch (error) {
-    vstatus.textContent = "Playback setup failed: " + error.message;
+    videoStatus.textContent = "Playback setup failed: " + error.message;
   }
 }
 
@@ -449,7 +471,7 @@ async function report(event) {
 }
 
 player.addEventListener("playing", () => {
-  vstatus.textContent = "▶ Playing";
+  videoStatus.textContent = "▶ Playing";
 
   if (activeId && startedId !== activeId) {
     startedId = activeId;
@@ -461,27 +483,29 @@ player.addEventListener("timeupdate", () => {
   if (!activeId || !player.duration) return;
 
   const now = Date.now();
-  if (now - lastProgress < 10000 && player.currentTime / player.duration < 0.8) return;
+  const ratio = player.currentTime / player.duration;
 
-  if (!progressBusy) {
-    progressBusy = true;
-    lastProgress = now;
-    report("progress").finally(() => {
-      progressBusy = false;
-    });
-  }
+  if (now - lastProgress < 10000 && ratio < 0.8) return;
+  if (progressBusy) return;
+
+  progressBusy = true;
+  lastProgress = now;
+
+  report("progress").finally(() => {
+    progressBusy = false;
+  });
 });
 
 player.addEventListener("loadstart", () => {
-  vstatus.textContent = "Loading stream...";
+  videoStatus.textContent = "Loading stream...";
 });
 
 player.addEventListener("canplay", () => {
-  vstatus.textContent = "Ready to play.";
+  videoStatus.textContent = "Ready to play.";
 });
 
 player.addEventListener("waiting", () => {
-  vstatus.textContent = "Buffering...";
+  videoStatus.textContent = "Buffering...";
 });
 
 player.addEventListener("pause", () => {
@@ -490,12 +514,12 @@ player.addEventListener("pause", () => {
 
 player.addEventListener("ended", () => {
   report("progress").finally(() => {
-    vstatus.textContent = "Playback finished.";
+    videoStatus.textContent = "Playback finished.";
   });
 });
 
 player.addEventListener("error", () => {
-  vstatus.textContent =
+  videoStatus.textContent =
     `Playback error${player.error ? ` (media error ${player.error.code})` : ""}. Check Worker streaming and Telegram file.`;
 });
 
@@ -506,7 +530,7 @@ $("playBtn").addEventListener("click", () => {
     const parsed = new URL(value);
     if (!["http:", "https:"].includes(parsed.protocol)) throw Error();
   } catch {
-    vstatus.textContent = "Enter a valid HTTP(S) video URL.";
+    videoStatus.textContent = "Enter a valid HTTP(S) video URL.";
     return;
   }
 
@@ -518,33 +542,55 @@ $("playBtn").addEventListener("click", () => {
   activeId = null;
   startedId = null;
   titleEl.textContent = "Direct Authorized Video";
-  vstatus.textContent = "Ready to play.";
+  videoStatus.textContent = "Ready to play.";
 });
 
-async function deleteVideo(id) {
+async function deleteVideo(id, button) {
   if (!owner) {
-    message("Delete permission denied. Owner account required.");
+    message("Delete is available only to the verified owner.");
+    return;
+  }
+
+  if (!id) {
+    message("Video ID is missing.");
     return;
   }
 
   const confirmed = confirm(
-    "Remove this video from the BoJhX Player library? The original Telegram channel post will remain."
+    "Delete this video from the BoJhX Player library? This cannot be undone."
   );
 
   if (!confirmed) return;
 
+  if (button) {
+    button.disabled = true;
+    button.textContent = "DELETING...";
+  }
+
   try {
-    await api("/api/delete-video", {
+    const data = await api("/api/delete-video", {
       method: "POST",
       body: JSON.stringify({ id })
     });
 
-    message("Video removed from the player library.", true);
+    if (data.deleted !== true) {
+      throw Error("Worker did not confirm deletion.");
+    }
 
-    const categoryToRefresh = categoryNow || "movies";
-    await openCategory(categoryToRefresh);
+    videosNow = videosNow.filter(video => video.id !== id);
+    renderVideos(videosNow);
+
+    catCount.textContent =
+      `${videosNow.length} video${videosNow.length === 1 ? "" : "s"}`;
+
+    message("Video successfully removed from the player library.", true);
   } catch (error) {
     message("Delete failed: " + error.message);
+
+    if (button) {
+      button.disabled = false;
+      button.textContent = "🗑 DELETE VIDEO";
+    }
   }
 }
 
@@ -555,7 +601,8 @@ function startParam() {
     return String(tg.initDataUnsafe.start_param);
   }
 
-  return new URLSearchParams(location.search).get("tgWebAppStartParam") || "";
+  return new URLSearchParams(location.search)
+    .get("tgWebAppStartParam") || "";
 }
 
 async function start() {
@@ -564,15 +611,16 @@ async function start() {
     tg?.expand();
   } catch {}
 
-  if (!await authenticate()) return;
+  const authenticated = await authenticate();
+  if (!authenticated) return;
 
-  const param = startParam();
+  const parameter = startParam();
 
-  if (param.startsWith("v_")) {
-    await loadVideo(param);
-  } else if (param.startsWith("category_")) {
-    await openCategory(param.slice("category_".length));
-  }
+  if (parameter.startsWith("v_")) {
+    await loadVideo(parameter);
+  } else if (parameter.startsWith("category_")) {
+    await openCategory(parameter.slice("category_".length));
+    }
 }
 
 start();
